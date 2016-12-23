@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#基于LSTM手写字符串生成实践此文基于Generating Sequences With Recurrent Neural Networks这篇paper，首先是paper解释，接着是代码实践。
+#paper解释开篇paper在讲述RNNs（回归神经网络）的原理和弊端，接着讲述了LSTM（短时记忆神经网络），下文按照paper中的顺序写这片文章
+#RNN神经网络原理这是一种适合按时间顺序输入的神">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2016/04/13/基于LSTM手写字符串生成实践/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#基于LSTM手写字符串生成实践此文基于Generating Sequences With Recurrent Neural Networks这篇paper，首先是paper解释，接着是代码实践。
+#paper解释开篇paper在讲述RNNs（回归神经网络）的原理和弊端，接着讲述了LSTM（短时记忆神经网络），下文按照paper中的顺序写这片文章
+#RNN神经网络原理这是一种适合按时间顺序输入的神">
+<meta property="og:image" content="http://ww2.sinaimg.cn/large/683953bcjw1f2u8a45twmj20qk0lvad1.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/683953bcjw1f2um03qm0lj20hs03bjsh.jpg">
+<meta property="og:updated_time" content="2016-04-12T21:10:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#基于LSTM手写字符串生成实践此文基于Generating Sequences With Recurrent Neural Networks这篇paper，首先是paper解释，接着是代码实践。
+#paper解释开篇paper在讲述RNNs（回归神经网络）的原理和弊端，接着讲述了LSTM（短时记忆神经网络），下文按照paper中的顺序写这片文章
+#RNN神经网络原理这是一种适合按时间顺序输入的神">
+<meta name="twitter:image" content="http://ww2.sinaimg.cn/large/683953bcjw1f2u8a45twmj20qk0lvad1.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-基于LSTM手写字符串生成实践" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/13/基于LSTM手写字符串生成实践/" class="article-date">
+  <time datetime="2016-04-12T20:11:53.000Z" itemprop="datePublished">2016-04-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#基于LSTM手写字符串生成实践<br>此文基于Generating Sequences With Recurrent Neural Networks这篇paper，首先是paper解释，接着是代码实践。</p>
+<p>#paper解释<br>开篇paper在讲述RNNs（回归神经网络）的原理和弊端，接着讲述了LSTM（短时记忆神经网络），下文按照paper中的顺序写这片文章</p>
+<p>#RNN神经网络原理<br><img src="http://ww2.sinaimg.cn/large/683953bcjw1f2u8a45twmj20qk0lvad1.jpg" alt="RNN神经网络"><br>这是一种适合按时间顺序输入的神经网络模型，整文基于上图这个神经网络模型<br>输入向量序列被标记为x = (x1, . . . , xT ),输入序列进入隐层，隐层的深度被标记为N，每隐层中的神经元被标记为 hn = (hn1 , . . . , hnT )，最终转化为输出向量标记为y = (y1 , . . . , yT )，每个输出向量又作为预测分布Pr(xt+1|yt)的参数预测下次可能的输入。<br>细节上，每个输入序列的第一个元素是0，基于此，网络产生下一时刻的预测x2，而真实的x2才是输入序列的第一数据。<br>细节上，输入链接链接了所有隐层，所有隐层链接了输出，目的在于减少底到顶的操作步骤，使得训练网络更轻松，并且减少<strong>梯度消失问题</strong>。<br>使用公式描述RNN的工作原理：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2um03qm0lj20hs03bjsh.jpg" alt="隐层计算公式"><br>以上两个公式是隐藏元素的计算公式 </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/13/基于LSTM手写字符串生成实践/" data-id="cix1v7e8h000hq83ahwh2uuw8" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/14/托普学院寝室分布/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/06/Yann LeCun 98 paper note/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/12/23/My-New-Post/">My New Post</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/21/2017年上半年工作计划/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/12/校园镖局逻辑文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/09/功能模块指标需求确认/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/20/接口总述/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

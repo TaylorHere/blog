@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="校园镖局逻辑文档注册与登录：Login.html?to=/xxx.html
+此页面负责从微信获取openid，并检查此openid是否已注册
+如注册则登录系统
+如未注册获取用户信息新建用户并登录系统
+登录成功后系统返回user_id,base作为登录凭证
+返回其他接口时请带上XXX-user-id:user-id,XXX-base:base请求头
+index.html
+此页面进入后
+访问缓存中的用">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2016/12/12/校园镖局逻辑文档/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="校园镖局逻辑文档注册与登录：Login.html?to=/xxx.html
+此页面负责从微信获取openid，并检查此openid是否已注册
+如注册则登录系统
+如未注册获取用户信息新建用户并登录系统
+登录成功后系统返回user_id,base作为登录凭证
+返回其他接口时请带上XXX-user-id:user-id,XXX-base:base请求头
+index.html
+此页面进入后
+访问缓存中的用">
+<meta property="og:updated_time" content="2016-12-12T05:03:37.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="校园镖局逻辑文档注册与登录：Login.html?to=/xxx.html
+此页面负责从微信获取openid，并检查此openid是否已注册
+如注册则登录系统
+如未注册获取用户信息新建用户并登录系统
+登录成功后系统返回user_id,base作为登录凭证
+返回其他接口时请带上XXX-user-id:user-id,XXX-base:base请求头
+index.html
+此页面进入后
+访问缓存中的用">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-校园镖局逻辑文档" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/12/12/校园镖局逻辑文档/" class="article-date">
+  <time datetime="2016-12-12T04:31:25.000Z" itemprop="datePublished">2016-12-12</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <h1 id="校园镖局逻辑文档"><a href="#校园镖局逻辑文档" class="headerlink" title="校园镖局逻辑文档"></a>校园镖局逻辑文档</h1><h2 id="注册与登录："><a href="#注册与登录：" class="headerlink" title="注册与登录："></a>注册与登录：</h2><p>Login.html?to=/xxx.html</p>
+<p>此页面负责从微信获取openid，并检查此openid是否已注册</p>
+<p>如注册则登录系统</p>
+<p>如未注册获取用户信息新建用户并登录系统</p>
+<p>登录成功后系统返回user_id,base作为登录凭证</p>
+<p>返回其他接口时请带上XXX-user-id:user-id,XXX-base:base请求头</p>
+<p>index.html</p>
+<p>此页面进入后</p>
+<p>访问缓存中的用户地址信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">data = &#123;</div><div class="line">        <span class="string">"filter"</span>:<span class="string">"user_id = "</span>+$.cookie(<span class="string">'user_id'</span>),</div><div class="line">        <span class="string">"desc_order_by"</span>:<span class="string">"id"</span></div><div class="line">    &#125;</div><div class="line">    data = <span class="built_in">JSON</span>.stringify(data)</div><div class="line">    $.ajax(&#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'POST'</span>,</div><div class="line">        <span class="attr">url</span>: <span class="string">'http://api.huacaoxiu.com/query/addresses'</span>,</div><div class="line">        <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">        <span class="attr">data</span>: data,</div><div class="line">        <span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">        <span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>: $.cookie(<span class="string">'base'</span>),<span class="string">'XXX-user-id'</span>:$.cookie(<span class="string">'user_id'</span>)&#125;,</div></pre></td></tr></table></figure>
+<p>用户修改地址后新建用户地址</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">            <span class="attr">type</span>: <span class="string">'POST'</span>,</div><div class="line">            <span class="attr">url</span>: <span class="string">'http://api.huacaoxiu.com/addresses/'</span>,</div><div class="line">            <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">            <span class="attr">data</span>: data,</div><div class="line">            <span class="comment">// async: true,</span></div><div class="line">            contentType: <span class="string">'application/json'</span>,</div><div class="line">            <span class="comment">// headers:&#123;'xxx-base':$.cookie('base')，‘xxx-user-id’:$.cookie('user_id')&#125;,</span></div><div class="line">            headers:&#123;<span class="string">"XXX-base"</span>: $.cookie(<span class="string">'base'</span>),<span class="string">'XXX-user-id'</span>:$.cookie(<span class="string">'user_id'</span>)&#125;,</div></pre></td></tr></table></figure>
+<p>并更新缓存</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">data_put = &#123;</div><div class="line">                    <span class="string">"filter"</span>:<span class="string">"user_id = "</span>+$.cookie(<span class="string">'user_id'</span>),</div><div class="line">                    <span class="string">"desc_order_by"</span>:<span class="string">"id"</span>,</div><div class="line">                &#125;</div><div class="line">                data_put = <span class="built_in">JSON</span>.stringify(data_put)</div><div class="line">                $.ajax(&#123;</div><div class="line">                    <span class="attr">type</span>: <span class="string">'PUT'</span>,</div><div class="line">                    <span class="attr">url</span>: <span class="string">'http://api.huacaoxiu.com/query/addresses'</span>,</div><div class="line">                    <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">                    <span class="attr">data</span>: data_put,</div><div class="line">                    <span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">                <span class="comment">// headers:&#123;'xxx-base':$.cookie('base')，‘xxx-user-id’:$.cookie('user_id')&#125;,</span></div><div class="line">                headers:&#123;<span class="string">"XXX-base"</span>: $.cookie(<span class="string">'base'</span>),<span class="string">'XXX-user-id'</span>:$.cookie(<span class="string">'user_id'</span>)&#125;,</div></pre></td></tr></table></figure>
+<p>发布镖单</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">        <span class="attr">type</span>: <span class="string">'POST'</span>,</div><div class="line">        <span class="attr">url</span>: <span class="string">'http://api.huacaoxiu.com/escorts/'</span>,</div><div class="line">        <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">        <span class="attr">data</span>: parm,</div><div class="line">        <span class="comment">// async: true,</span></div><div class="line">        contentType: <span class="string">'application/json'</span>,</div><div class="line">        <span class="comment">// headers:&#123;'xxx-base':$.cookie('base')，‘xxx-user-id’:$.cookie('user_id')&#125;,</span></div><div class="line">        headers:&#123;<span class="string">"XXX-base"</span>: $.cookie(<span class="string">'base'</span>),<span class="string">'XXX-user-id'</span>:$.cookie(<span class="string">'user_id'</span>)&#125;,</div><div class="line">        <span class="attr">success</span>: <span class="function"><span class="keyword">function</span> (<span class="params">data</span>) </span>&#123;</div><div class="line">            <span class="comment">//加载内容</span></div><div class="line">            $(<span class="string">'#loadingToast'</span>).hide();</div><div class="line">            get_payinfo_byorderid(data.data.id);</div><div class="line">            $(<span class="string">'#loadingToast'</span>).hide();</div><div class="line">        &#125;,</div><div class="line">        <span class="attr">error</span>: <span class="function"><span class="keyword">function</span> (<span class="params">XMLHttpRequest, textStatus, errorThrown</span>) </span>&#123;</div><div class="line">            alert(<span class="string">'错误信息:'</span>+XMLHttpRequest.responseText)</div><div class="line">        &#125;</div><div class="line">    &#125;)</div></pre></td></tr></table></figure>
+<p>my_bd_list.html</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">function</span> <span class="title">get_un_complete_bd</span>(<span class="params">argument</span>) //获取未完成镖单</span></div><div class="line"><span class="title">function</span> <span class="title">get_complete_bd</span>(<span class="params">argument</span>) //获取完成镖单</div><div class="line"><span class="title">btn_primary</span>:<span class="title">function</span>(<span class="params">id,index</span>)&#123;</div><div class="line"></div><div class="line">							$.ajax(&#123;</div><div class="line">							<span class="attr">type</span>: <span class="string">'put'</span>,</div><div class="line">							<span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>:base ,<span class="string">'XXX-user-id'</span>:user_id&#125;,</div><div class="line">							<span class="attr">data</span>:<span class="built_in">JSON</span>.stringify(&#123;<span class="string">'user_id'</span>:user_id,<span class="string">'progress'</span>:<span class="string">'complete'</span>&#125;),</div><div class="line"><span class="comment">//btn_primary设置镖单为完成</span></div><div class="line">pay_again:<span class="function"><span class="keyword">function</span>(<span class="params">id,index</span>) </span>&#123;</div><div class="line">						get_payinfo_byorderid(id,<span class="string">'escort'</span>,openid)</div><div class="line">					&#125;,</div><div class="line"><span class="comment">//pay_again发起重新支付</span></div><div class="line">delete_bd:<span class="function"><span class="keyword">function</span>(<span class="params">id,index</span>) </span>&#123;</div><div class="line">						$.ajax(&#123;</div><div class="line">							<span class="attr">type</span>: <span class="string">'put'</span>,</div><div class="line">							<span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>:base ,<span class="string">'XXX-user-id'</span>:user_id&#125;,</div><div class="line">							<span class="attr">data</span>:<span class="built_in">JSON</span>.stringify(&#123;<span class="string">'user_id'</span>:user_id,<span class="string">'progress'</span>:<span class="string">'off'</span>&#125;),</div><div class="line">							<span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">	        				<span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">					        <span class="attr">url</span>: <span class="string">"http://api.huacaoxiu.com/escorts/"</span>+id,</div><div class="line"><span class="attr">delete_bd</span>:<span class="function"><span class="keyword">function</span>(<span class="params">id,index</span>) </span>&#123;</div><div class="line">						$.ajax(&#123;</div><div class="line">							<span class="attr">type</span>: <span class="string">'put'</span>,</div><div class="line">							<span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>:base ,<span class="string">'XXX-user-id'</span>:user_id&#125;,</div><div class="line">							<span class="attr">data</span>:<span class="built_in">JSON</span>.stringify(&#123;<span class="string">'user_id'</span>:user_id,<span class="string">'progress'</span>:<span class="string">'off'</span>&#125;),</div><div class="line">							<span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">	        				<span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">					        <span class="attr">url</span>: <span class="string">"http://api.huacaoxiu.com/escorts/"</span>+id,</div><div class="line"><span class="comment">//dalete_bd:设置镖单为删除状态</span></div></pre></td></tr></table></figure>
+<p>bs_bd_list.html</p>
+<p>同上</p>
+<p>be_bs_upimg.html</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">            <span class="attr">type</span>: <span class="string">'POST'</span>,</div><div class="line">            <span class="attr">url</span>: <span class="string">'http://api.huacaoxiu.com/escortores'</span>,</div><div class="line">            <span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">            <span class="attr">data</span>: data_put,</div><div class="line">            <span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">            <span class="comment">// headers:&#123;'xxx-base':$.cookie('base')，‘xxx-user-id’:$.cookie('user_id')&#125;,</span></div><div class="line">            headers:&#123;<span class="string">"XXX-base"</span>: $.cookie(<span class="string">'base'</span>),<span class="string">'XXX-user-id'</span>:$.cookie(<span class="string">'user_id'</span>)&#125;,</div><div class="line">  <span class="comment">//获取镖师id，用于后续上传图片</span></div><div class="line">  <span class="comment">//后续使用put更新镖师信息</span></div></pre></td></tr></table></figure>
+<p>get_bd.html</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">$.ajax(&#123;</div><div class="line">		<span class="attr">type</span>: <span class="string">'get'</span>,</div><div class="line">		<span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>:base ,<span class="string">'XXX-user-id'</span>:user_id&#125;,</div><div class="line">        <span class="attr">url</span>: <span class="string">"http://api.huacaoxiu.com/escorts/?no_expired=true&amp;filter=progress='on' and _paid=1"</span>,</div><div class="line">		<span class="attr">async</span>: <span class="literal">true</span>,</div><div class="line"><span class="comment">//获取未过期，已支付，并将过期镖单设为off，并退款</span></div></pre></td></tr></table></figure>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">take_bd:<span class="function"><span class="keyword">function</span>(<span class="params">id</span>)</span>&#123;</div><div class="line">						$.ajax(&#123;</div><div class="line">							<span class="attr">type</span>: <span class="string">'put'</span>,</div><div class="line">							<span class="attr">headers</span>:&#123;<span class="string">"XXX-base"</span>:base ,<span class="string">'XXX-user-id'</span>:user_id&#125;,</div><div class="line">							<span class="attr">data</span>:<span class="built_in">JSON</span>.stringify(&#123;<span class="string">"escortor_id"</span>:escortor_id,<span class="string">"user_id"</span>:user_id,<span class="string">"progress"</span>:<span class="string">"run"</span>&#125;),</div><div class="line">							<span class="attr">dataType</span>: <span class="string">'json'</span>,</div><div class="line">	        				<span class="attr">contentType</span>: <span class="string">'application/json'</span>,</div><div class="line">					        <span class="attr">url</span>: <span class="string">"http://api.huacaoxiu.com/escorts/"</span>+id,</div><div class="line"><span class="comment">//设置escort 为run状态，并带上user_id做检验，带上escortor_id标记接镖镖师</span></div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/12/12/校园镖局逻辑文档/" data-id="cix1v7e96000sq83accvu96qw" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/12/21/2017年上半年工作计划/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/12/09/功能模块指标需求确认/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/12/23/My-New-Post/">My New Post</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/21/2017年上半年工作计划/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/12/校园镖局逻辑文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/09/功能模块指标需求确认/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/20/接口总述/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

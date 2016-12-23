@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="#Yann LeCun 98 paper note
+##introductionLeCun主要说了在神经网络以前，实现ML的方法主要是半自动化半人工干预的，比如以前实现一个模式的识别会把这个模式低参数化，然后再把低参数化后的参数做映射，他认为这样的设计方式的瓶颈是设计者本身的先验知识，并且往往这样设计的模型会和具体实验目标联系太紧密，也就是没有推广性，设计的一个系统不能用在新的目标上，而大部分模式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2016/04/06/Yann LeCun 98 paper note/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="#Yann LeCun 98 paper note
+##introductionLeCun主要说了在神经网络以前，实现ML的方法主要是半自动化半人工干预的，比如以前实现一个模式的识别会把这个模式低参数化，然后再把低参数化后的参数做映射，他认为这样的设计方式的瓶颈是设计者本身的先验知识，并且往往这样设计的模型会和具体实验目标联系太紧密，也就是没有推广性，设计的一个系统不能用在新的目标上，而大部分模式">
+<meta property="og:image" content="http://ww3.sinaimg.cn/mw690/683953bcjw1f2n072wp2hj20eq08ygm3.jpg">
+<meta property="og:image" content="http://ww2.sinaimg.cn/mw690/683953bcjw1f2n3ngpkhij205200s3yb.jpg">
+<meta property="og:image" content="http://ww4.sinaimg.cn/mw690/683953bcjw1f2n3vgbkrjj206n00s0sk.jpg">
+<meta property="og:updated_time" content="2016-04-06T09:42:03.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="#Yann LeCun 98 paper note
+##introductionLeCun主要说了在神经网络以前，实现ML的方法主要是半自动化半人工干预的，比如以前实现一个模式的识别会把这个模式低参数化，然后再把低参数化后的参数做映射，他认为这样的设计方式的瓶颈是设计者本身的先验知识，并且往往这样设计的模型会和具体实验目标联系太紧密，也就是没有推广性，设计的一个系统不能用在新的目标上，而大部分模式">
+<meta name="twitter:image" content="http://ww3.sinaimg.cn/mw690/683953bcjw1f2n072wp2hj20eq08ygm3.jpg">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-Yann LeCun 98 paper note" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/04/06/Yann LeCun 98 paper note/" class="article-date">
+  <time datetime="2016-04-05T18:39:01.000Z" itemprop="datePublished">2016-04-06</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>#Yann LeCun 98 paper note</p>
+<p>##introduction<br>LeCun主要说了在神经网络以前，实现ML的方法主要是半自动化半人工干预的，比如以前实现一个模式的识别会把这个模式低参数化，然后再把低参数化后的参数做映射，他认为这样的设计方式的瓶颈是设计者本身的先验知识，并且往往这样设计的模型会和具体实验目标联系太紧密，也就是没有推广性，设计的一个系统不能用在新的目标上，而大部分模式识别的paper都致力于研究不同任务的模型建立，而不是提出一种可以适应各种任务的模型，或者针对具体任务快速建立模型的方法。<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2n072wp2hj20eq08ygm3.jpg" alt="插图1"><br>但是，近10年因为三大因素改变了这种现状：</p>
+<ol>
+<li>低成本高效率的计算机器</li>
+<li>可获得非常巨大的数据库</li>
+<li>最重要的一点就是更牛逼的机器学习计算方法的提出，能够处理更高维的特征空间<br>他提到了OCR使用BP神经网络，接下来就是章节介绍。<br>本文中，除了介绍CNN外，还会比较其他算法对于手写识别率的影响。<br>##A. Learining form Data<br>实现自动ML的方法有很多，近几年来公认的最成功的方法就是被称作基于梯度下降的神经网络法，机器学习计算一个函数：<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2n3ngpkhij205200s3yb.jpg" alt="模式识别公式"><br>在这个公式中，Zp一个p维的输入模式，W代表系统中可调整的参数集，Yp可以代表Zp的分类标签，也可以代表每个属于某个类别的概率<br>loss函数（现在也叫cost函数）：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2n3vgbkrjj206n00s0sk.jpg" alt="lossFunction"><br>这个函数测量了Dp与Yp之间的误差</li>
+</ol>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/04/06/Yann LeCun 98 paper note/" data-id="cix1v7e830007q83awz4axgzc" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/04/13/基于LSTM手写字符串生成实践/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/04/04/通俗语言描述人工神经网络，反向传播算法，卷积神经网络－－人工神经网络/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/12/23/My-New-Post/">My New Post</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/21/2017年上半年工作计划/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/12/校园镖局逻辑文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/09/功能模块指标需求确认/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/20/接口总述/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>

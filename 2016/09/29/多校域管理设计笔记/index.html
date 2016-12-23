@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Hexo</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="多校域管理
+前端每次request携带校域信息
+后端根据前端request的校域信息，进行判断
+后端数据存在一个数据库，每条数据添加校域字段
+每个入口添加校域判断逻辑
+不给校方管理团队提供用户数据管理
+分校内容：
+本校只接受本校镖单
+镖师只能看见本校镖单
+以上可以通过community来做区分
+不需要所有表都添加community字段
+Escortor.user.address.is_authen">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo">
+<meta property="og:url" content="http://yoursite.com/2016/09/29/多校域管理设计笔记/index.html">
+<meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="多校域管理
+前端每次request携带校域信息
+后端根据前端request的校域信息，进行判断
+后端数据存在一个数据库，每条数据添加校域字段
+每个入口添加校域判断逻辑
+不给校方管理团队提供用户数据管理
+分校内容：
+本校只接受本校镖单
+镖师只能看见本校镖单
+以上可以通过community来做区分
+不需要所有表都添加community字段
+Escortor.user.address.is_authen">
+<meta property="og:updated_time" content="2016-09-29T15:56:48.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hexo">
+<meta name="twitter:description" content="多校域管理
+前端每次request携带校域信息
+后端根据前端request的校域信息，进行判断
+后端数据存在一个数据库，每条数据添加校域字段
+每个入口添加校域判断逻辑
+不给校方管理团队提供用户数据管理
+分校内容：
+本校只接受本校镖单
+镖师只能看见本校镖单
+以上可以通过community来做区分
+不需要所有表都添加community字段
+Escortor.user.address.is_authen">
+  
+    <link rel="alternate" href="/atom.xml" title="Hexo" type="application/atom+xml">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    <link href="//fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet" type="text/css">
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Hexo</a>
+      </h1>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">Home</a>
+        
+          <a class="main-nav-link" href="/archives">Archives</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="Flux RSS"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Rechercher"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" results="0" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-多校域管理设计笔记" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2016/09/29/多校域管理设计笔记/" class="article-date">
+  <time datetime="2016-09-29T06:24:30.000Z" itemprop="datePublished">2016-09-29</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>多校域管理</p>
+<p>前端每次request携带校域信息</p>
+<p>后端根据前端request的校域信息，进行判断</p>
+<p>后端数据存在一个数据库，每条数据添加校域字段</p>
+<p>每个入口添加校域判断逻辑</p>
+<p>不给校方管理团队提供用户数据管理</p>
+<p>分校内容：</p>
+<p>本校只接受本校镖单</p>
+<p>镖师只能看见本校镖单</p>
+<p>以上可以通过community来做区分</p>
+<p>不需要所有表都添加community字段</p>
+<p>Escortor.user.address.is_authentic就是镖师区域</p>
+<p>Escort.community就是镖单区域，此字段需要新增。</p>
+<p>get_bd 要判断user的区域</p>
+<p>所以user也需要位置标记</p>
+<p>使用user.address.is_defatult作为user默认区域</p>
+<p>如果user没有默认位置，则显示按数据内容显示（或提示没有默认位置无法显示镖单）。</p>
+<p>如果是镖师则使用Escortor.user.address.is_authentic</p>
+<p>订单出现的时候只推送给Escortor.user.address.is_authentic == Escort.community的镖师</p>
+<p>修改如下：</p>
+<p>​    Escort 添加 community 字段, 完成</p>
+<p>​    get_bd</p>
+<p>​    <strong>判断用户位置</strong>，并从数据库提出相应数据，完成</p>
+<p>​    send_bd</p>
+<p>​    推送只推送给    Escortor.user.address.is_authentic == Escort.community </p>
+<p>Escort 设计解释</p>
+<p>escort的位置信息没有采用耦合Address表的原因：</p>
+<p>​    escort未来将会向其他系统开放</p>
+<p>​    而未来这些系统不一定会将addre信息保存到address表</p>
+<p>​    也就是说，escort的全部位置信息自主存储可以和address解耦</p>
+<p>​    但是user和escortor信息没有解耦是考虑到，user和escor是我们提供的服务的关键，所以不解耦。</p>
+<p>​    </p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2016/09/29/多校域管理设计笔记/" data-id="cix1v7e8p000jq83ajd4n2trh" class="article-share-link">Partager</a>
+      
+      
+    </footer>
+  </div>
+  
+    
+<nav id="article-nav">
+  
+    <a href="/2016/09/29/我想和你在一起/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Récent</strong>
+      <div class="article-nav-title">
+        
+          (no title)
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2016/09/26/蹲位商城API设计笔记/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Ancien</strong>
+      <div class="article-nav-title"></div>
+    </a>
+  
+</nav>
+
+  
+</article>
+
+</section>
+        
+          <aside id="sidebar">
+  
+    
+
+  
+    
+
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/11/">November 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/10/">October 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/09/">September 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/08/">August 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/07/">July 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/06/">June 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/05/">May 2016</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/04/">April 2016</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Articles récents</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2016/12/23/My-New-Post/">My New Post</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/21/2017年上半年工作计划/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/12/校园镖局逻辑文档/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/12/09/功能模块指标需求确认/">(no title)</a>
+          </li>
+        
+          <li>
+            <a href="/2016/11/20/接口总述/">(no title)</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+        
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2016 John Doe<br>
+      Propulsé by <a href="http://hexo.io/" target="_blank">Hexo</a>
+    </div>
+  </div>
+</footer>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+</nav>
+    
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+
+  </div>
+</body>
+</html>
