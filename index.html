@@ -52,23 +52,57 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-11-10T11:58:52.000Z"><a href="/2016/11/10/通用查询/">2016-11-10</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/deploying/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/11/10/通用查询/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/deploying/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="通用查询"><a href="#通用查询" class="headerlink" title="通用查询"></a>通用查询</h1><h2 id="过滤-对源数据过滤-："><a href="#过滤-对源数据过滤-：" class="headerlink" title="过滤(对源数据过滤)："></a>过滤(对源数据过滤)：</h2><p>​    <strong>filter</strong>（字段参数过滤，提供等于 不等于，大于小于，或，且，包含，不包含等逻辑查询）</p>
-<p>​    filter=’name\==taylor&amp;nickname^here&amp;age &lt;20’</p>
-<p>​    获取name为taylor，nickname包含 here age小于20的数据</p>
-<h2 id="排序（对结果集排序）："><a href="#排序（对结果集排序）：" class="headerlink" title="排序（对结果集排序）："></a>排序（对结果集排序）：</h2><p>​    <strong>asc_order_by</strong>（按某字段正序排列）</p>
-<p>​    <strong>desc_order_by</strong>（按某字段倒叙排列）</p>
-<h2 id="投影（按某种规则从结果集中获取子集）："><a href="#投影（按某种规则从结果集中获取子集）：" class="headerlink" title="投影（按某种规则从结果集中获取子集）："></a>投影（按某种规则从结果集中获取子集）：</h2><p>​    <strong>limit</strong>    （分页）</p>
-<p>​    <strong>fileds</strong>（只获取该参数下的字段数据）</p>
+        <h1 id="Deploying"><a href="#Deploying" class="headerlink" title="Deploying"></a>Deploying</h1><p>When it comes to deploying Sanic, there’s not much to it, but there are<br>a few things to take note of.</p>
+<h2 id="Workers"><a href="#Workers" class="headerlink" title="Workers"></a>Workers</h2><p>By default, Sanic listens in the main process using only 1 CPU core.<br>To crank up the juice, just specify the number of workers in the run<br>arguments like so:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+<p>Sanic will automatically spin up multiple processes and route<br>traffic between them.  We recommend as many workers as you have<br>available cores.</p>
+<h2 id="Running-via-Command"><a href="#Running-via-Command" class="headerlink" title="Running via Command"></a>Running via Command</h2><p>If you like using command line arguments, you can launch a sanic server<br>by executing the module.  For example, if you initialized sanic as<br>app in a file named server.py, you could run the server like so:</p>
+<p><code>python -m sanic server.app --host=0.0.0.0 --port=1337 --workers=4</code></p>
+<p>With this way of running sanic, it is not necessary to run app.run in<br>your python file.  If you do, just make sure you wrap it in name == main<br>like so:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/routing/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/routing/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Routing"><a href="#Routing" class="headerlink" title="Routing"></a>Routing</h1><p>Sanic comes with a basic router that supports request parameters.  To specify a parameter, surround it with carrots like so: <code>&lt;PARAM&gt;</code>.  Request parameters will be passed to the request handler functions as keyword arguments.  To specify a type, add a :type after the parameter name, in the carrots.  If the parameter does not match the type supplied, Sanic will throw a NotFound exception, resulting in a 404 page not found error.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line"><span class="meta">@app.route('/tag/&lt;tag&gt;')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">tag_handler</span><span class="params">(request, tag)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Tag - &#123;&#125;'</span>.format(tag))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/number/&lt;integer_arg:int&gt;')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">integer_handler</span><span class="params">(request, integer_arg)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Integer - &#123;&#125;'</span>.format(integer_arg))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/number/&lt;number_arg:number&gt;')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">number_handler</span><span class="params">(request, number_arg)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Number - &#123;&#125;'</span>.format(number_arg))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/person/&lt;name:[A-z]&gt;')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">person_handler</span><span class="params">(request, name)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Person - &#123;&#125;'</span>.format(name))</div><div class="line"></div><div class="line"><span class="meta">@app.route('/folder/&lt;folder_id:[A-z0-9]&#123;0,4&#125;&gt;')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">folder_handler</span><span class="params">(request, folder_id)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Folder - &#123;&#125;'</span>.format(folder_id))</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler1</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'OK'</span>)</div><div class="line">app.add_route(handler1, <span class="string">'/test'</span>)</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request, name)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Folder - &#123;&#125;'</span>.format(name))</div><div class="line">app.add_route(handler, <span class="string">'/folder/&lt;name&gt;'</span>)</div><div class="line"></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">person_handler</span><span class="params">(request, name)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'Person - &#123;&#125;'</span>.format(name))</div><div class="line">app.add_route(handler, <span class="string">'/person/&lt;name:[A-z]&gt;'</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -91,228 +125,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-09-26T07:13:04.000Z"><a href="/2016/09/26/分析下列句子的句子结构/">2016-09-26</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/request_data/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/09/26/分析下列句子的句子结构/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/request_data/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="分析下列句子的句子结构"><a href="#分析下列句子的句子结构" class="headerlink" title="分析下列句子的句子结构"></a>分析下列句子的句子结构</h1><ol>
-<li><p>we are working.</p>
-<p>​</p>
-</li>
-<li><p>I can swim very well.</p>
-<p>​</p>
-</li>
-<li><p>The waiter brought a bottle of beer to me.</p>
-<p>​</p>
-</li>
-<li><p>Why does the wind blow.</p>
-<p>​</p>
-</li>
-<li><p>The rain has been pulling down for a whole day.</p>
-<p>​</p>
-</li>
-<li><p>Both Tom and Jack enjoy country music.</p>
-<p>​</p>
-</li>
-<li><p>Jim asked you to give his best wishes to everyone.</p>
-<p>​</p>
-</li>
-<li><p>You must get the car ready by tomorrow.</p>
-<p>​</p>
-</li>
-<li><p>I have a lot of clothes to wash.</p>
-<p>​</p>
-</li>
-<li><p>He gave his son some advice on reading.</p>
-<p>​</p>
-</li>
-<li><p>Read me the first paragraph.</p>
-<p>​</p>
-</li>
-<li><p>I’ve ordered some soup for you.</p>
-<p>​</p>
-</li>
-<li><p>He began leaning English ten years ago.</p>
-<p>​</p>
-</li>
-<li><p>My being late worried my teacher.</p>
-<p>​</p>
-</li>
-<li><p>The president himself would visit our school.</p>
-<p>​</p>
-</li>
-<li><p>April fool’Day is the special day of the year</p>
-<p>​</p>
-</li>
-<li><p>He usually takes a nap after lunch.</p>
-<p>​</p>
-</li>
-<li><p>I got it back at once.</p>
-<p>​</p>
-</li>
-<li><p>He finished lunch and went into the garden.</p>
-<p>​</p>
-</li>
-<li><p>The telephone rang.</p>
-<p>​</p>
-</li>
-<li><p>We study hard.</p>
-<p>​</p>
-</li>
-<li><p>His father might have died.</p>
-<p>​</p>
-</li>
-<li><p>Will you leave the door open/ unclosed</p>
-<p>​</p>
-</li>
-<li><p>Can you make the dog stand still?</p>
-<p>​</p>
-</li>
-<li><p>The landlord had them working day and night.</p>
-<p>​</p>
-</li>
-<li><p>A sound knowledge of grammar is important to good writing.</p>
-<p>​</p>
-</li>
-<li><p>We all breathe, eat, and drink.</p>
-<p>​</p>
-</li>
-<li><p>I woke up at 6:00 in the morning.</p>
-<p>​</p>
-</li>
-<li><p>The book weighs five kilos.</p>
-<p>​</p>
-</li>
-<li>They will be flying to London.</li>
-</ol>
-<p>综合练习一 答案</p>
-<p>分析下列句子的句子结构</p>
-<ol>
-<li>We are working.</li>
-</ol>
-<p>我们在工作。主系表</p>
-<ol>
-<li>I can swim very well.</li>
-</ol>
-<p>我游泳泳地很好。主谓</p>
-<ol>
-<li>The waiter brought a bottle of beer to me.</li>
-</ol>
-<p>那个使者给我了一瓶啤酒。主谓双宾/主谓宾状</p>
-<ol>
-<li>Why does the wind blow?</li>
-</ol>
-<p>风为什么会吹？主谓</p>
-<ol>
-<li>The rain has been pulling down for a whole day.</li>
-</ol>
-<p>雨已经下了一整天了。主谓</p>
-<ol>
-<li>Both Tom and Jack enjoy country music.</li>
-</ol>
-<p>汤姆和杰克都喜欢乡村音乐。主谓宾</p>
-<ol>
-<li>Jim asked you to give his best wishes to everyone.</li>
-</ol>
-<p>吉姆请我把他的最好的祝愿带给每个人。主谓宾补</p>
-<ol>
-<li>You must get the car ready by tomorrow.</li>
-</ol>
-<p>到明天为止你一定要把小车准备好。主谓宾补</p>
-<ol>
-<li>I have a lot of clothes to wash.</li>
-</ol>
-<p>我有许多的衣服需要洗。主谓宾，to wash做clothes的定语</p>
-<ol>
-<li>He gave his son some advice on reading.</li>
-</ol>
-<p>他在阅读方面给了他的儿子一些建议。主谓双宾</p>
-<ol>
-<li>Read me the first paragraph.</li>
-</ol>
-<p>给我读第一段。主谓双宾</p>
-<ol>
-<li>I’ve ordered some soup for you.</li>
-</ol>
-<p>我已经为你要了一些汤。主谓双宾/主谓宾状</p>
-<ol>
-<li>He began leaning English ten years ago.</li>
-</ol>
-<p>十年前他开始学英语。主谓宾</p>
-<ol>
-<li>My being late worried my teacher.</li>
-</ol>
-<p>我的迟到让我的老师很担心。主谓宾，动名词短语My being late做主语</p>
-<ol>
-<li>The president himself would visit our school.</li>
-</ol>
-<p>总统将亲自参观我们的学校。主谓宾</p>
-<ol>
-<li>April fool’Day is the special day of the year</li>
-</ol>
-<p>愚人节是一年中很特别的一天。主系表</p>
-<ol>
-<li>He usually takes a nap after lunch.</li>
-</ol>
-<p>他通常在午饭之后要小睡一会儿。主谓宾</p>
-<ol>
-<li>I got it back at once.</li>
-</ol>
-<p>我马上把它取回 。主谓宾</p>
-<ol>
-<li>He finished lunch and went into the garden.</li>
-</ol>
-<p>他吃完午饭后去了花园。主+并列谓语</p>
-<ol>
-<li>The telephone rang.</li>
-</ol>
-<p>电话响了。主谓</p>
-<ol>
-<li>We study hard.</li>
-</ol>
-<p>我们努力学习。主谓</p>
-<ol>
-<li>His father might have died.</li>
-</ol>
-<p>他的父亲可能已经去世了。主谓</p>
-<ol>
-<li>Will you leave the door open/ unclosed?</li>
-</ol>
-<p>你要把门开着？主谓宾补</p>
-<ol>
-<li>Can you make the dog stand still?</li>
-</ol>
-<p>你能让那只狗站着不动吗？主谓宾补</p>
-<ol>
-<li>The landlord had them working day and night.</li>
-</ol>
-<p>地主让他们整天工作，主谓宾补</p>
-<ol>
-<li>A sound knowledge of grammar is important to good writing.</li>
-</ol>
-<p>扎实的语法知识对于写作是重要的。主系表</p>
-<ol>
-<li>We all breathe, eat， and drink.</li>
-</ol>
-<p>我们大家都呼吸、吃和喝。主谓</p>
-<ol>
-<li>I woke up at 6:00 in the morning。</li>
-</ol>
-<p>我在早上6点钟起床。主谓</p>
-<ol>
-<li>The book weighs five kilos.</li>
-</ol>
-<p>那本书重达10斤。主谓，five kilos做状语</p>
-<ol>
-<li>They will be flying to London.</li>
-</ol>
-<p>他们将飞往伦敦。主谓宾</p>
+        <h1 id="Request-Data"><a href="#Request-Data" class="headerlink" title="Request Data"></a>Request Data</h1><h2 id="Properties"><a href="#Properties" class="headerlink" title="Properties"></a>Properties</h2><p>The following request variables are accessible as properties:</p>
+<p><code>request.files</code> (dictionary of File objects) - List of files that have a name, body, and type<br><code>request.json</code> (any) - JSON body<br><code>request.args</code> (dict) - Query String variables.  Use getlist to get multiple of the same name<br><code>request.form</code> (dict) - Posted form variables.  Use getlist to get multiple of the same name<br><code>request.body</code> (bytes) - Posted raw body.  To get the raw data, regardless of content type  </p>
+<p>See request.py for more information</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json, text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/json")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"message"</span>: request.json &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/form")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"form_data"</span>: request.form, <span class="string">"test"</span>: request.form.get(<span class="string">'test'</span>) &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/files")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">	test_file = request.files.get(<span class="string">'test'</span>)</div><div class="line"></div><div class="line">	file_parameters = &#123;</div><div class="line">		<span class="string">'body'</span>: test_file.body,</div><div class="line">		<span class="string">'name'</span>: test_file.name,</div><div class="line">		<span class="string">'type'</span>: test_file.type,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"file_names"</span>: request.files.keys(), <span class="string">"test_file_parameters"</span>: file_parameters &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/query_string")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">query_string</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"parsed"</span>: <span class="keyword">True</span>, <span class="string">"args"</span>: request.args, <span class="string">"url"</span>: request.url, <span class="string">"query_string"</span>: request.query_string &#125;)</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@app.route("/users", methods=["POST",])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">"You are trying to create a user with the following POST: %s"</span> % request.body)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -335,27 +161,28 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-09-19T17:03:13.000Z"><a href="/2016/09/20/英文短文/">2016-09-20</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/testing/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/09/20/英文短文/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/testing/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <p>As we all know, love is the crux of a happy life.<br>众所周知，爱是幸福生活的关键所在。</p>
-<p>Love helps us stay calm and serene even when things are tough.<br>爱帮助我们在时事艰难的时候保持沉着，平静的心态。</p>
-<p>It can carry us through the hard times.<br>它能帮我们度过苦难的时光。</p>
-<p>Love looks for ways to be of service.<br>爱会自己寻找助人的途径。</p>
-<p>Love is enjoying the surprises of life,<br>爱是享受生命中的诸多惊喜，</p>
-<p>and being totally delighted with what life gives you.<br>爱是完全满足于生活的给予。</p>
-<p>Love is the key to happiness<br>爱是幸福生活的钥匙，</p>
-<p>and it is a real blessing to others. 　<br>爱是对他人真挚的祝福。</p>
-<p>People who love make the world a kind and gentle place and other people feel safe around them.<br>心中有爱的人让世界充满仁慈和儒雅之风，让周围的人感到安全。</p>
-<p>They appreciate differences instead of making them a cause for prejudice or fighting. 　<br>他们求同存异，而不是把分歧作为成见或者争执的理由。</p>
-<p><a href="https://github.com/TaylorHere" target="_blank" rel="external">taht make me into peace</a></p>
+        <h1 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h1><p>Sanic endpoints can be tested locally using the <code>sanic.utils</code> module, which<br>depends on the additional <a href="https://aiohttp.readthedocs.io/en/stable/" target="_blank" rel="external">aiohttp</a><br>library. The <code>sanic_endpoint_test</code> function runs a local server, issues a<br>configurable request to an endpoint, and returns the result. It takes the<br>following arguments:</p>
+<ul>
+<li><code>app</code> An instance of a Sanic app.</li>
+<li><code>method</code> <em>(default <code>&#39;get&#39;</code>)</em> A string representing the HTTP method to use.</li>
+<li><code>uri</code> <em>(default <code>&#39;/&#39;</code>)</em> A string representing the endpoint to test.</li>
+<li><code>gather_request</code> <em>(default <code>True</code>)</em> A boolean which determines whether the<br>original request will be returned by the function. If set to <code>True</code>, the<br>return value is a tuple of <code>(request, response)</code>, if <code>False</code> only the<br>response is returned.</li>
+<li><code>loop</code> <em>(default <code>None</code>)</em> The event loop to use.</li>
+<li><code>debug</code> <em>(default <code>False</code>)</em> A boolean which determines whether to run the<br>server in debug mode.</li>
+</ul>
+<p>The function further takes the <code>*request_args</code> and <code>**request_kwargs</code>, which<br>are passed directly to the aiohttp ClientSession request. For example, to<br>supply data with a GET request, <code>method</code> would be <code>get</code> and the keyword<br>argument <code>params={&#39;value&#39;, &#39;key&#39;}</code> would be supplied. More information about<br>the available arguments to aiohttp can be found<br><a href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session" target="_blank" rel="external">in the documentation for ClientSession</a>.</p>
+<p>Below is a complete example of an endpoint test,<br>using <a href="http://doc.pytest.org/en/latest/" target="_blank" rel="external">pytest</a>. The test checks that the<br><code>/challenge</code> endpoint responds to a GET request with a supplied challenge<br>string.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pytest</div><div class="line"><span class="keyword">import</span> aiohttp</div><div class="line"><span class="keyword">from</span> sanic.utils <span class="keyword">import</span> sanic_endpoint_test</div><div class="line"></div><div class="line"><span class="comment"># Import the Sanic app, usually created with Sanic(__name__)</span></div><div class="line"><span class="keyword">from</span> external_server <span class="keyword">import</span> app</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_endpoint_challenge</span><span class="params">()</span>:</span></div><div class="line">    <span class="comment"># Create the challenge data</span></div><div class="line">    request_data = &#123;<span class="string">'challenge'</span>: <span class="string">'dummy_challenge'</span>&#125;</div><div class="line"></div><div class="line">    <span class="comment"># Send the request to the endpoint, using the default `get` method</span></div><div class="line">    request, response = sanic_endpoint_test(app,</div><div class="line">                                            uri=<span class="string">'/challenge'</span>,</div><div class="line">                                            params=request_data)</div><div class="line"></div><div class="line">    <span class="comment"># Assert that the server responds with the challenge string</span></div><div class="line">    <span class="keyword">assert</span> response.text == request_data[<span class="string">'challenge'</span>]</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -378,17 +205,18 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-09-18T18:04:39.000Z"><a href="/2016/09/19/If I Fall (Beatles Cover)/">2016-09-19</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/static_files/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/09/19/If I Fall (Beatles Cover)/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/static_files/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="If-I-Fall-Beatles-Cover"><a href="#If-I-Fall-Beatles-Cover" class="headerlink" title="If I Fall (Beatles Cover)"></a>If I Fall (Beatles Cover)</h1><p>If I fell in love with you<br>Would you promise to be true<br>And help me understand<br>Cause I’ve been in love before<br>And I’ve found that love was more<br>Than just holding hands<br>If I give my heart to you<br>I must be sure from the very start<br>That you would love me more than her<br>If I trust in you<br>Oh now please don’t run and hide<br>If I love you too<br>Oh please don’t hurt my pride like her<br>Cause I couldn’t stand the pain<br>And I would be sad if I knew love was in vain<br>So I hope you’ll see<br>That I would love to love you<br>And that she will cry<br>When she learns we are two<br>Cause I couldn’t stand the pain<br>And I would be sad if I knew love was in vain<br>So I hope you’ll see<br>That I would love to love you<br>And that she will cry<br>When she learns we are two<br>If I fell in love with you</p>
+        <h1 id="Static-Files"><a href="#Static-Files" class="headerlink" title="Static Files"></a>Static Files</h1><p>Both directories and files can be served by registering with static</p>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="comment"># Serves files from the static folder to the URL /static</span></div><div class="line">app.static(<span class="string">'/static'</span>, <span class="string">'./static'</span>)</div><div class="line"></div><div class="line"><span class="comment"># Serves the file /home/ubuntu/test.png when the URL /the_best.png</span></div><div class="line"><span class="comment"># is requested</span></div><div class="line">app.static(<span class="string">'/the_best.png'</span>, <span class="string">'/home/ubuntu/test.png'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -411,31 +239,31 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-09-08T19:19:27.000Z"><a href="/2016/09/09/怎样才能称为一个合格的程序员/">2016-09-09</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/getting_started/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/09/09/怎样才能称为一个合格的程序员/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/getting_started/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="怎样才能称为一个合格的程序员"><a href="#怎样才能称为一个合格的程序员" class="headerlink" title="怎样才能称为一个合格的程序员"></a>怎样才能称为一个合格的程序员</h1><p>程序员作为一种职业，其能力主要体现在利用或制造工具解决问题。</p>
-<p>程序员应该拥有以下能力：</p>
-<ol>
-<li>基本科学素养</li>
-<li>了解计算机运行原理</li>
-<li>了解代码执行原理</li>
-<li>抽象问题的能力</li>
-<li>学习和快速学习的能力</li>
-<li>通过简单的说明便能掌握工具的能力</li>
-<li>通过经验使用工具的能力</li>
-<li>利用工具抽象问题的能力</li>
-<li>创造8需要的工具的能力</li>
-<li>保证大部分人也能使用9所创造的工具的能力</li>
-</ol>
-<p>除了2 3 两条以外，其他能力与计算机领域无关</p>
+        <h1 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h1><p>Make sure you have pip and python 3.5 before starting</p>
+<h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h2><ul>
+<li>Install Sanic</li>
+<li><code>python3 -m pip install sanic</code></li>
+<li><p>Edit main.py to include:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"hello"</span>: <span class="string">"world"</span> &#125;)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Run <code>python3 main.py</code></p>
+</li>
+</ul>
+<p>You now have a working Sanic server!  To continue on, check out:</p>
+<ul>
+<li><a href="request_data.md">Request Data</a></li>
+<li><a href="routing.md">Routing</a></li>
+</ul>
 
       
     </div>
@@ -458,26 +286,22 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-09-06T15:55:30.000Z"><a href="/2016/09/06/git常用命令集合/">2016-09-06</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/middleware/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/09/06/git常用命令集合/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/middleware/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="git常用命令集合"><a href="#git常用命令集合" class="headerlink" title="git常用命令集合"></a>git常用命令集合</h1><p><strong>git help</strong>： 查看所有git命令与解释</p>
-<p><strong>git clone</strong>+远程仓库地址 ：克隆远程仓库到本地</p>
-<p><strong>git branch</strong>+分支名：新建一个分支</p>
-<p><strong>git checkout</strong>+分支名：切换到某个分支</p>
-<p><strong>git pull</strong>+远程仓库名+远程分支名：从远程仓库 的分支里，将代码更新到本地当前分支</p>
-<p><strong>git status</strong>：查看工作状态</p>
-<p><strong>git add</strong>：添加修改到暂存区</p>
-<p><strong>git commit</strong> ：将暂存区的内容提交到本地仓库</p>
-<p><strong>git log</strong>：查看本地参考当前分支的历史提交记录</p>
-<p><strong>git push</strong>+远程仓库名+远程分支名：将本地仓库更新到远处</p>
+        <h1 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h1><p>Middleware can be executed before or after requests.  It is executed in the order it was registered.  If middleware returns a response object, the request will stop processing and a response will be returned.</p>
+<p>Middleware is registered via the middleware decorator, and can either be added as ‘request’ or ‘response’ middleware, based on the argument provided in the decorator.  Response middleware receives both the request and the response as arguments.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I would like to speak now please'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<h2 id="Middleware-chain"><a href="#Middleware-chain" class="headerlink" title="Middleware chain"></a>Middleware chain</h2><p>If you want to apply the middleware as a chain, applying more than one, is so easy. You only have to be aware that you do <strong>not return</strong> any response in your middleware:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">custom_banner</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"Server"</span>] = <span class="string">"Fake-Server"</span></div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">prevent_xss</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"x-xss-protection"</span>] = <span class="string">"1; mode=block"</span></div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<p>The above code will apply the two middlewares in order. First the middleware <strong>custom_banner</strong> will change the HTTP Response headers <em>Server</em> by <em>Fake-Server</em>, and the second middleware <strong>prevent_xss</strong> will add the HTTP Headers for prevent Cross-Site-Scripting (XSS) attacks.</p>
 
       
     </div>
@@ -500,29 +324,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-08-21T08:17:25.000Z"><a href="/2016/08/21/微服务架构设计V0.1/">2016-08-21</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/class_based_views/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/21/微服务架构设计V0.1/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/class_based_views/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="微服务架构设计大纲"><a href="#微服务架构设计大纲" class="headerlink" title="微服务架构设计大纲"></a>微服务架构设计大纲</h1><p>花草秀是一个大型的、多应用的、多技术栈的、多团队的项目，为了满足花草秀项目发展需要，现提出微服务架构体系。</p>
-<p>微服务架构的特点：一个完整的产品可以由多个服务构成，这些服务可以是整个项目的公用组件，场景如下：</p>
-<p>产品校园镖局，拥有用户系统，订单系统和支付系统</p>
-<p>微服务架构模式下可以拆分为：</p>
-<p>用户服务、订单服务、支付服务、</p>
-<p>这三个服务并不仅仅是用于校园镖局项目，同时可以用于其他项目，即一个服务并不是针对某一具体产品开发，而是针对某一具体问题，使用一个服务的方式是从服务系统里产生一个实例，这个实例提供了消费方相关的业务逻辑。</p>
-<h3 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h3><p>服务实例给消费者提供配置和数据查询和事件监听功能，服务自身拥有与特定问题相关的逻辑代码，服务拥有实例管理的能力。</p>
-<p>服务实例和消费者实例之间使用网络进行通信，服务实例内部使用异步消息队列向消费者发送事件\数据消息。</p>
-<p>服务实例应该保证链接的安全性。</p>
-<p>服务能够独立部署。</p>
-<p>服务可用由任何语言、框架编写。</p>
-<h2 id="python语言设计规范"><a href="#python语言设计规范" class="headerlink" title="python语言设计规范"></a>python语言设计规范</h2><p>内部队列使用RQ</p>
-<p> <img src="../../../../Desktop/Screen Shot 2016-08-26 at 14.50.20.png" alt="Screen Shot 2016-08-26 at 14.50.20"></p>
+        <h1 id="Class-based-views"><a href="#Class-based-views" class="headerlink" title="Class based views"></a>Class based views</h1><p>Sanic has simple class based implementation. You should implement methods(get, post, put, patch, delete) for the class to every HTTP method you want to support. If someone tries to use a method that has not been implemented, there will be 405 response.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.views <span class="keyword">import</span> HTTPMethodView</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line">app = Sanic(<span class="string">'some_name'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am get method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am post method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am put method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">patch</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am patch method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am delete method'</span>)</div><div class="line"></div><div class="line">app.add_route(SimpleView(), <span class="string">'/'</span>)</div></pre></td></tr></table></figure>
+<p>If you need any url params just mention them in method definition:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NameView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, name)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">'Hello &#123;&#125;'</span>.format(name))</div><div class="line"></div><div class="line">app.add_route(NameView(), <span class="string">'/&lt;name&gt;'</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -545,17 +360,38 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-08-10T17:06:52.000Z"><a href="/2016/08/11/The Zen of Python, by Tim Peters/">2016-08-11</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/blueprints/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/08/11/The Zen of Python, by Tim Peters/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/blueprints/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="The-Zen-of-Python-by-Tim-Peters"><a href="#The-Zen-of-Python-by-Tim-Peters" class="headerlink" title="The Zen of Python, by Tim Peters"></a>The Zen of Python, by Tim Peters</h1><p>Beautiful is better than ugly.<br>Explicit is better than implicit.<br>Simple is better than complex.<br>Complex is better than complicated.<br>Flat is better than nested.<br>Sparse is better than dense.<br>Readability counts.<br>Special cases aren’t special enough to break the rules.<br>Although practicality beats purity.<br>Errors should never pass silently.<br>Unless explicitly silenced.<br>In the face of ambiguity, refuse the temptation to guess.<br>There should be one– and preferably only one –obvious way to do it.<br>Although that way may not be obvious at first unless you’re Dutch.<br>Now is better than never.<br>Although never is often better than <em>right</em> now.<br>If the implementation is hard to explain, it’s a bad idea.<br>If the implementation is easy to explain, it may be a good idea.<br>Namespaces are one honking great idea – let’s do more of those!</p>
+        <h1 id="Blueprints"><a href="#Blueprints" class="headerlink" title="Blueprints"></a>Blueprints</h1><p>Blueprints are objects that can be used for sub-routing within an application.<br>Instead of adding routes to the application object, blueprints define similar<br>methods for adding routes, which are then registered with the application in a<br>flexible and pluggable manner.</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h2><p>Blueprints are especially useful for larger applications, where your application<br>logic can be broken down into several groups or areas of responsibility.</p>
+<p>It is also useful for API versioning, where one blueprint may point at<br><code>/v1/&lt;routes&gt;</code>, and another pointing at <code>/v2/&lt;routes&gt;</code>.</p>
+<h2 id="My-First-Blueprint"><a href="#My-First-Blueprint" class="headerlink" title="My First Blueprint"></a>My First Blueprint</h2><p>The following shows a very simple blueprint that registers a handler-function at<br>the root <code>/</code> of your application.</p>
+<p>Suppose you save this file as <code>my_blueprint.py</code>, this can be imported in your<br>main application later.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Blueprint</div><div class="line"></div><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bp_root</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123;<span class="string">'my'</span>: <span class="string">'blueprint'</span>&#125;)</div></pre></td></tr></table></figure>
+<h2 id="Registering-Blueprints"><a href="#Registering-Blueprints" class="headerlink" title="Registering Blueprints"></a>Registering Blueprints</h2><p>Blueprints must be registered with the application.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> my_blueprint <span class="keyword">import</span> bp</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line">app.blueprint(bp)</div><div class="line"></div><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<p>This will add the blueprint to the application and register any routes defined<br>by that blueprint.<br>In this example, the registered routes in the <code>app.router</code> will look like:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Route(handler=&lt;function bp_root at <span class="number">0x7f908382f9d8</span>&gt;, methods=<span class="keyword">None</span>, pattern=re.compile(<span class="string">'^/$'</span>), parameters=[])]</div></pre></td></tr></table></figure>
+<h2 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h2><p>Using blueprints allows you to also register middleware globally.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div></pre></td></tr></table></figure>
+<h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><p>Exceptions can also be applied exclusively to blueprints globally.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div><div class="line"></div><div class="line"><span class="comment">## Static files</span></div><div class="line">Static files can also be served globally, under the blueprint prefix.</div><div class="line"></div><div class="line">```python</div><div class="line">bp.static(<span class="string">'/folder/to/serve'</span>, <span class="string">'/web/path'</span>)</div></pre></td></tr></table></figure>
+<h2 id="Start-and-Stop"><a href="#Start-and-Stop" class="headerlink" title="Start and Stop"></a>Start and Stop</h2><p>Blueprints and run functions during the start and stop process of the server.<br>If running in multiprocessor mode (more than 1 worker), these are triggered after the workers fork<br>Available events are:</p>
+<ul>
+<li>before_server_start - Executed before the server begins to accept connections</li>
+<li>after_server_start - Executed after the server begins to accept connections</li>
+<li>before_server_stop - Executed before the server stops accepting connections</li>
+<li>after_server_stop - Executed after the server is stopped and all requests are complete</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.listen('before_server_start')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">setup_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">global</span> database</div><div class="line">    database = mysql.connect(host=<span class="string">'127.0.0.1'</span>...)</div><div class="line">    </div><div class="line"><span class="meta">@bp.listen('after_server_stop')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">close_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">await</span> database.close()</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -578,103 +414,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-07-13T03:42:42.000Z"><a href="/2016/07/13/使用git rebase的正确姿势/">2016-07-13</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/exceptions/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/07/13/使用git rebase的正确姿势/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="使用git-rebase的正确姿势"><a href="#使用git-rebase的正确姿势" class="headerlink" title="使用git rebase的正确姿势"></a>使用git rebase的正确姿势</h1><p>公司的workflow的特点就是每次push到master都要rebase，保持master历史记录是一条线，方便回滚。</p>
-<p>所以记录一下rebase的正确使用姿势</p>
-<h2 id="git-rebase-i-合并历史commit"><a href="#git-rebase-i-合并历史commit" class="headerlink" title="git rebase -i 合并历史commit"></a>git rebase -i 合并历史commit</h2><p>首先接触git rebase是用来合并历史提交的，情景如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">新建我的分支，开发一个新功能</div><div class="line"></div><div class="line">修改，提交</div><div class="line"></div><div class="line">发现有问题，修改，提交</div><div class="line"></div><div class="line">增加新功能，修改，提交</div><div class="line"></div><div class="line">push到远程</div></pre></td></tr></table></figure>
-<p>boss:你这个不行，一个功能只能有一个提交</p>
-<p>ok</p>
-<p>那么rebase  -i 就派上用场了，-i参数是指互动interaction</p>
-<p>上面情景里，我一共有三次提交,可以查看记录git log</p>
-<p>会发现我们的三次提交在最上面，现在我们要把这三个合一</p>
-<p>命令这么写</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rebase -i HEAD~3</div></pre></td></tr></table></figure>
-<p>这个命令中HEAD~3代表了操作最新的三次提交</p>
-<p>命令运行后，会在默认编辑器里打开一个文档</p>
-<p>类似于</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">pick 231j2jif312</div><div class="line">pick 1231231rr8y32</div><div class="line">pick 1233472937413</div></pre></td></tr></table></figure>
-<p>当然真实文件里还有很多东西，但是这三行才是我们要关注的</p>
-<p>这里的231j 这样的东西是某个commit的hash，这三个commit是倒序排列的，最下面的最新，前面的pick的意思是选用这个commit</p>
-<p>除了pick命令还有 squash edit一类的命令，他们有不同的作用，详见文档下方（不是指这篇文档）。</p>
-<p>我们要关注的就是squash这个命令</p>
-<p>这个命令的作用是把一个commit合并到前面那个去，</p>
-<p>所以我们要做的事就是把2、3行的pick改为squash，或者s</p>
-<p>然后保存，这是便会执行合并操作，接着会有个文档打开让你决定哪些commit说明会被提及。</p>
-<p>如果rebase过程中，打算回到操作前状态，可以用rebase –abort命令</p>
-<p>接着再看log会发现之前的三commit被合并成一个了。</p>
-<p>现在push -f 到远程就不会被boss说了。</p>
-<p>boss：ok，你合并到master吧，记得用rebase。</p>
-<h2 id="git-rebase-重并分支"><a href="#git-rebase-重并分支" class="headerlink" title="git rebase 重并分支"></a>git rebase 重并分支</h2><p>rebase的真正用途来了</p>
-<p>现在我们工作在我的工作分支下，现在我们去到master分支</p>
-<p>然后执行git pull</p>
-<p>这是可能会遇到conflict</p>
-<p>我们要去到对应的文件</p>
-<p>conflict标注方式如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; commit 1 or head</div><div class="line">code 1</div><div class="line">＝＝＝＝＝＝＝＝＝＝</div><div class="line">cdeo 2</div><div class="line">&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; commit 2 or somethings else</div></pre></td></tr></table></figure>
-<p>code 1和cdeo 2发生了冲突，</p>
-<p>code 1所在的区域，是你的代码，cdeo 2区域是别的修改，只需删除不需要的代码和标志即可</p>
-<p>修改conflict会要求commit，这时commit一下</p>
-<p>这是master的代码是最新的，</p>
-<p>然后回到工作分支，开始rebase</p>
-<p>这时master和我的分支相比，master比我提前了一个分支，但是我需要把我的提交放在master的最后，也就是用master最新的基（base）作为我的提交的基，这便是rebase的功能和名称由来</p>
-<p>回到分支后执行一下命令</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rebase master</div></pre></td></tr></table></figure>
-<p>这是如果遇到冲突，解决完后不要commit，只add就行，接着</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rebase --continue</div></pre></td></tr></table></figure>
-<p>如果成功合并，查看log会发现我们的commit在最前面，这是我们还要把之前pull时产生的commit合并到我们的commit里面来。完工后回master merge，然后push到远程。</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-06-20T17:12:34.000Z"><a href="/2016/06/21/第一次应聘/">2016-06-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/06/21/第一次应聘/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/exceptions/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="第一次应聘"><a href="#第一次应聘" class="headerlink" title="第一次应聘"></a>第一次应聘</h1><p>参加了人生第一次笔试和面试，记录一下心情</p>
-<p>2016年6月20日，世界滑板日前夕，我参加了思应科技的招聘，第一轮是笔试，笔试在一台树莓派机器上进行，是在线编程，编程平台叫<a href="http://codility.com" target="_blank" rel="external">codility</a> </p>
-<h4 id="结果很烂"><a href="#结果很烂" class="headerlink" title="结果很烂"></a>结果很烂</h4><p>面试题有3道，两道算法，一道SQL，第一道算法，很快就斩获, 第二道 在一个曲线里面找出最深的开口朝上的二次函数，本来很简单，但是搞错了连续增加的判断方式，导致浪费了很多时间，SQL不会做。</p>
-<h4 id="反思"><a href="#反思" class="headerlink" title="反思"></a>反思</h4><p>必须多刷点题啊，不然大公司是进不了的</p>
-<p>后来看笔试结果的时候我都快哭了，烂的一逼，旁边应聘iOS那哥子已经约好和BOSS远程面试，我已经做好走人的准备。</p>
-<h4 id="反转"><a href="#反转" class="headerlink" title="反转"></a>反转</h4><p>结果HR叫我准备面试，说BOSS要面我。</p>
-<p>然后就是和BOSS愉快的聊了聊天，然后就通过了。</p>
-<h4 id="最后"><a href="#最后" class="headerlink" title="最后"></a>最后</h4><p>3000块实习工资，我觉得还是可以的，毕竟我才大一，以后的上升空间很大。</p>
-<h4 id="经验"><a href="#经验" class="headerlink" title="经验"></a>经验</h4><p>一定要舍得要价格，并且要适当的提高一点保价，boos说不压价格，但是可能会让你度过一个很长时间的低价格期，特别是做暑假工这种。</p>
-<p>这个很重要，如果你打算要5000你就要6000，如果你打算要7000你就要9000这样子。</p>
-<h4 id="共勉"><a href="#共勉" class="headerlink" title="共勉"></a>共勉</h4>
+        <h1 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h1><p>Exceptions can be thrown from within request handlers and will automatically be handled by Sanic.  Exceptions take a message as their first argument, and can also take a status_code to be passed back in the HTTP response.  Check sanic.exceptions for the full list of exceptions to throw.</p>
+<h2 id="Throwing-an-exception"><a href="#Throwing-an-exception" class="headerlink" title="Throwing an exception"></a>Throwing an exception</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> ServerError</div><div class="line"></div><div class="line"><span class="meta">@app.route('/killme')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">i_am_ready_to_die</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">raise</span> ServerError(<span class="string">"Something bad happened"</span>)</div></pre></td></tr></table></figure>
+<h2 id="Handling-Exceptions"><a href="#Handling-Exceptions" class="headerlink" title="Handling Exceptions"></a>Handling Exceptions</h2><p>Just use the @exception decorator.  The decorator expects a list of exceptions to handle as arguments.  You can pass SanicException to catch them all!  The exception handler must expect a request and exception object as arguments.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> NotFound</div><div class="line"></div><div class="line"><span class="meta">@app.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div></pre></td></tr></table></figure>
       
     </div>
     <footer>
@@ -694,14 +447,14 @@
 <nav id="pagination">
   
   
-    <a href="/page/2/" class="alignright next">Next</a>
+    <a href="/page/2/" class="alignright next">Nächste Seite</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="search" name="q" results="0" placeholder="Suche">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>

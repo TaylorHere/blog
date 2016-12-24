@@ -1,0 +1,165 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Taylor|Here</title>
+  <meta name="author" content="Taylor Lee">
+  
+  <meta name="description" content="Taylor&#39;s blog|python|android|java|js|">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Taylor|Here"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Taylor|Here" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Taylor|Here</a></h1>
+  <h2><a href="/">seize the day</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/testing/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Testing"><a href="#Testing" class="headerlink" title="Testing"></a>Testing</h1><p>Sanic endpoints can be tested locally using the <code>sanic.utils</code> module, which<br>depends on the additional <a href="https://aiohttp.readthedocs.io/en/stable/" target="_blank" rel="external">aiohttp</a><br>library. The <code>sanic_endpoint_test</code> function runs a local server, issues a<br>configurable request to an endpoint, and returns the result. It takes the<br>following arguments:</p>
+<ul>
+<li><code>app</code> An instance of a Sanic app.</li>
+<li><code>method</code> <em>(default <code>&#39;get&#39;</code>)</em> A string representing the HTTP method to use.</li>
+<li><code>uri</code> <em>(default <code>&#39;/&#39;</code>)</em> A string representing the endpoint to test.</li>
+<li><code>gather_request</code> <em>(default <code>True</code>)</em> A boolean which determines whether the<br>original request will be returned by the function. If set to <code>True</code>, the<br>return value is a tuple of <code>(request, response)</code>, if <code>False</code> only the<br>response is returned.</li>
+<li><code>loop</code> <em>(default <code>None</code>)</em> The event loop to use.</li>
+<li><code>debug</code> <em>(default <code>False</code>)</em> A boolean which determines whether to run the<br>server in debug mode.</li>
+</ul>
+<p>The function further takes the <code>*request_args</code> and <code>**request_kwargs</code>, which<br>are passed directly to the aiohttp ClientSession request. For example, to<br>supply data with a GET request, <code>method</code> would be <code>get</code> and the keyword<br>argument <code>params={&#39;value&#39;, &#39;key&#39;}</code> would be supplied. More information about<br>the available arguments to aiohttp can be found<br><a href="https://aiohttp.readthedocs.io/en/stable/client_reference.html#client-session" target="_blank" rel="external">in the documentation for ClientSession</a>.</p>
+<p>Below is a complete example of an endpoint test,<br>using <a href="http://doc.pytest.org/en/latest/" target="_blank" rel="external">pytest</a>. The test checks that the<br><code>/challenge</code> endpoint responds to a GET request with a supplied challenge<br>string.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">import</span> pytest</div><div class="line"><span class="keyword">import</span> aiohttp</div><div class="line"><span class="keyword">from</span> sanic.utils <span class="keyword">import</span> sanic_endpoint_test</div><div class="line"></div><div class="line"><span class="comment"># Import the Sanic app, usually created with Sanic(__name__)</span></div><div class="line"><span class="keyword">from</span> external_server <span class="keyword">import</span> app</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">test_endpoint_challenge</span><span class="params">()</span>:</span></div><div class="line">    <span class="comment"># Create the challenge data</span></div><div class="line">    request_data = &#123;<span class="string">'challenge'</span>: <span class="string">'dummy_challenge'</span>&#125;</div><div class="line"></div><div class="line">    <span class="comment"># Send the request to the endpoint, using the default `get` method</span></div><div class="line">    request, response = sanic_endpoint_test(app,</div><div class="line">                                            uri=<span class="string">'/challenge'</span>,</div><div class="line">                                            params=request_data)</div><div class="line"></div><div class="line">    <span class="comment"># Assert that the server responds with the challenge string</span></div><div class="line">    <span class="keyword">assert</span> response.text == request_data[<span class="string">'challenge'</span>]</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Kommentare</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/12/24/testing/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Taylor Lee
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
