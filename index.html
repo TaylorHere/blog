@@ -52,24 +52,193 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/deploying/">2016-12-24</a></time>
+        <time datetime="2016-12-24T18:41:32.000Z"><a href="/2016/12/25/SinglePage框架反思/">2016-12-25</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/12/24/deploying/"></a></h1>
+    <h1 class="title"><a href="/2016/12/25/SinglePage框架反思/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="Deploying"><a href="#Deploying" class="headerlink" title="Deploying"></a>Deploying</h1><p>When it comes to deploying Sanic, there’s not much to it, but there are<br>a few things to take note of.</p>
-<h2 id="Workers"><a href="#Workers" class="headerlink" title="Workers"></a>Workers</h2><p>By default, Sanic listens in the main process using only 1 CPU core.<br>To crank up the juice, just specify the number of workers in the run<br>arguments like so:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
-<p>Sanic will automatically spin up multiple processes and route<br>traffic between them.  We recommend as many workers as you have<br>available cores.</p>
-<h2 id="Running-via-Command"><a href="#Running-via-Command" class="headerlink" title="Running via Command"></a>Running via Command</h2><p>If you like using command line arguments, you can launch a sanic server<br>by executing the module.  For example, if you initialized sanic as<br>app in a file named server.py, you could run the server like so:</p>
-<p><code>python -m sanic server.app --host=0.0.0.0 --port=1337 --workers=4</code></p>
-<p>With this way of running sanic, it is not necessary to run app.run in<br>your python file.  If you do, just make sure you wrap it in name == main<br>like so:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+        <p>12／24号下午接触了一个比较新的框架，<a href="https://github.com/channelcat/sanic" target="_blank" rel="external">sanic</a></p>
+<p>据作者描述，sanic框架非常快。</p>
+<p>以下是性能对比</p>
+<h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h2><p>所有测试均运行在AWS单核中型机上，Ubuntu系统。 </p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Implementation</th>
+<th style="text-align:right">Requests/sec</th>
+<th style="text-align:right">Avg Latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sanic</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">33,342</td>
+<td style="text-align:right">2.96ms</td>
+</tr>
+<tr>
+<td>Wheezy</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">20,244</td>
+<td style="text-align:right">4.94ms</td>
+</tr>
+<tr>
+<td>Falcon</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">18,972</td>
+<td style="text-align:right">5.27ms</td>
+</tr>
+<tr>
+<td>Bottle</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">13,596</td>
+<td style="text-align:right">7.36ms</td>
+</tr>
+<tr>
+<td>Flask</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">4,988</td>
+<td style="text-align:right">20.08ms</td>
+</tr>
+<tr>
+<td>Kyoukai</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">3,889</td>
+<td style="text-align:right">27.44ms</td>
+</tr>
+<tr>
+<td>Aiohttp</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">2,979</td>
+<td style="text-align:right">33.42ms</td>
+</tr>
+<tr>
+<td>Tornado</td>
+<td>Python 3.5</td>
+<td style="text-align:right">2,138</td>
+<td style="text-align:right">46.66ms</td>
+</tr>
+</tbody>
+</table>
+<p>还有一个重点在于这个框架长得和flask特别像。</p>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"></div><div class="line"></div><div class="line">app = Sanic()</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123;<span class="string">"hello"</span>: <span class="string">"world"</span>&#125;)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<p>所以花了几个小时将自己的RESTful框架<a href="https://github.com/TaylorHere/SinglePage" target="_blank" rel="external">SinglePage</a>改为Sanic实现，以下是一些记录和对SinglePage框架的方式：</p>
+<h3 id="Sanic和Flask的路由系统的异同："><a href="#Sanic和Flask的路由系统的异同：" class="headerlink" title="Sanic和Flask的路由系统的异同："></a>Sanic和Flask的路由系统的异同：</h3><p>​    他们均可以把url字符串注册到方法或者类上，同时注册方法的时可以在url中配置参数映射为方法的参数，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> *</div><div class="line"><span class="comment"># or from sanic import *</span></div><div class="line">app = Flask(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="meta">@app.route('/url/&lt;int:id&gt;',methods=['GET'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">url_sample</span><span class="params">(id)</span>:</span></div><div class="line">	<span class="keyword">print</span> id</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>这个例子中可以通过访问/url/1 打印出 1.</p>
+<p>但Flask和Sanic在route实现上有细微的差别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Flask router add </span></div><div class="line"></div><div class="line"><span class="comment">#Sanic router add </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, uri, methods, handler)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        Adds a handler to the route list</div><div class="line">        :param uri: Path to match</div><div class="line">        :param methods: Array of accepted method names.</div><div class="line">        If none are provided, any method is allowed</div><div class="line">        :param handler: Request handler function.</div><div class="line">        When executed, it should provide a response object.</div><div class="line">        :return: Nothing</div><div class="line">        """</div></pre></td></tr></table></figure>
+<p>Sanic 的route实现中，uri中的parameter没有与方法绑定而是处理对象绑定</p>
+<p>也就是说当你定义了基于类的处理对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> *</div><div class="line">app = Sanic(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMethodView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.add_route(MyMethodView, <span class="string">'/uri/&lt;pk&gt;'</span>)</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>我们期待的get方法中拥有一个pk参数，但事实上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> *</div><div class="line">app = Sanic(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMethodView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.add_route(MyMethodView, <span class="string">'/uri/&lt;pk&gt;'</span>)</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>put方法也拥有pk参数</p>
+<p>Flask中不存在这样的问题</p>
+<h3 id="Flask和Sanic都有蓝图的实现"><a href="#Flask和Sanic都有蓝图的实现" class="headerlink" title="Flask和Sanic都有蓝图的实现"></a>Flask和Sanic都有蓝图的实现</h3><p>Flask和Sanic还有一个显著的差别，</p>
+<p>Flask的Request对象对于消费者来说是一个全局的对象</p>
+<p>Sanic的Request对象是具体处理方法中的一个参数。</p>
+<h3 id="Sanic的特性"><a href="#Sanic的特性" class="headerlink" title="Sanic的特性"></a>Sanic的特性</h3><p>Sanic和Django一样推崇中间件</p>
+<p>但是Sanic的中间件设计有一个问题，中间件处理函数中无法获知具体的handler实例引用</p>
+<p>而request对象也无法添加任何信息，这导致了中间件只能做request和response的处理，其它处理，均不能结合处理实例，所以中间件连数据库连接这中事都做不了。</p>
+<p>基于类的处理实现HTTPMethodView</p>
+<p>并不会在每次request过来时都会新生成实例，而是全局共用一个实例。</p>
+<h3 id="对SinglePage的反思"><a href="#对SinglePage的反思" class="headerlink" title="对SinglePage的反思"></a>对SinglePage的反思</h3><p>SinglePage换为Sanic实现后并没有获得性能上的飞速增长，只有小幅度的提升。</p>
+<p>可能原因有下：</p>
+<p>​    1/数据库连接，全局通用一个session，这可能导致注阻塞</p>
+<p>​    2/内容序列化，SinglePage最大的特点就是能自动将处理对象的返回进行序列化生成标准的JSON数据，但是目前的序列化实现是蠢python的递归实现，这个实现本身比较缓慢，其次如果返回有1000条，序列化器会对这1000条数据每条进行结构探索，生产字典或列表。</p>
+<p>但实际上这1000条的数据等结构是相同的，唯一的差别在于数据的值，所以应该仿造Flask和Sanic的URI实现，只在程序拉起起时进行一次序列化结构探索，并将结果缓存，然后对返回通过这个缓存来获取值，这样同时能实现前端定义返回结构的功能。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/exceptions/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/exceptions/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h1><p>Exceptions can be thrown from within request handlers and will automatically be handled by Sanic.  Exceptions take a message as their first argument, and can also take a status_code to be passed back in the HTTP response.  Check sanic.exceptions for the full list of exceptions to throw.</p>
+<h2 id="Throwing-an-exception"><a href="#Throwing-an-exception" class="headerlink" title="Throwing an exception"></a>Throwing an exception</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> ServerError</div><div class="line"></div><div class="line"><span class="meta">@app.route('/killme')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">i_am_ready_to_die</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">raise</span> ServerError(<span class="string">"Something bad happened"</span>)</div></pre></td></tr></table></figure>
+<h2 id="Handling-Exceptions"><a href="#Handling-Exceptions" class="headerlink" title="Handling Exceptions"></a>Handling Exceptions</h2><p>Just use the @exception decorator.  The decorator expects a list of exceptions to handle as arguments.  You can pass SanicException to catch them all!  The exception handler must expect a request and exception object as arguments.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> NotFound</div><div class="line"></div><div class="line"><span class="meta">@app.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div></pre></td></tr></table></figure>
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/cookies/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/cookies/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h1><h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h2><p>Request cookies can be accessed via the request.cookie dictionary</p>
+<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/cookie")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    test_cookie = request.cookies.get(<span class="string">'test'</span>)</div><div class="line">    <span class="keyword">return</span> text(<span class="string">"Test cookie set to: &#123;&#125;"</span>.format(test_cookie))</div></pre></td></tr></table></figure>
+<h2 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h2><p>Response cookies can be set like dictionary values and<br>have the following parameters available:</p>
+<ul>
+<li>expires - datetime - Time for cookie to expire on the client’s browser</li>
+<li>path - string - The Path attribute specifies the subset of URLs to <pre><code>which this cookie applies
+</code></pre></li>
+<li>comment - string - Cookie comment (metadata)</li>
+<li>domain - string - Specifies the domain for which the<pre><code>cookie is valid.  An explicitly specified domain must always 
+start with a dot.
+</code></pre></li>
+<li>max-age - number - Number of seconds the cookie should live for</li>
+<li>secure - boolean - Specifies whether the cookie will only be sent via<pre><code>HTTPS
+</code></pre></li>
+<li>httponly - boolean - Specifies whether the cookie cannot be read<pre><code>by javascript
+</code></pre></li>
+</ul>
+<h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/cookie")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    response = text(<span class="string">"There's a cookie up in this response"</span>)</div><div class="line">    response.cookies[<span class="string">'test'</span>] = <span class="string">'It worked!'</span></div><div class="line">    response.cookies[<span class="string">'test'</span>][<span class="string">'domain'</span>] = <span class="string">'.gotta-go-fast.com'</span></div><div class="line">    response.cookies[<span class="string">'test'</span>][<span class="string">'httponly'</span>] = <span class="keyword">True</span></div><div class="line">    <span class="keyword">return</span> response</div></pre></td></tr></table></figure>
       
     </div>
     <footer>
@@ -125,6 +294,98 @@
     <header>
       
         <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/contributing/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/contributing/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="How-to-contribute-to-Sanic"><a href="#How-to-contribute-to-Sanic" class="headerlink" title="How to contribute to Sanic"></a>How to contribute to Sanic</h1><p>Thank you for your interest!</p>
+<h2 id="Running-tests"><a href="#Running-tests" class="headerlink" title="Running tests"></a>Running tests</h2><ul>
+<li><code>python -m pip install pytest</code></li>
+<li><code>python -m pytest tests</code></li>
+</ul>
+<h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h2><p>One of the main goals of Sanic is speed.  Code that lowers the performance of Sanic without significant gains in usability, security, or features may not be merged.</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/blueprints/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/blueprints/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Blueprints"><a href="#Blueprints" class="headerlink" title="Blueprints"></a>Blueprints</h1><p>Blueprints are objects that can be used for sub-routing within an application.<br>Instead of adding routes to the application object, blueprints define similar<br>methods for adding routes, which are then registered with the application in a<br>flexible and pluggable manner.</p>
+<h2 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h2><p>Blueprints are especially useful for larger applications, where your application<br>logic can be broken down into several groups or areas of responsibility.</p>
+<p>It is also useful for API versioning, where one blueprint may point at<br><code>/v1/&lt;routes&gt;</code>, and another pointing at <code>/v2/&lt;routes&gt;</code>.</p>
+<h2 id="My-First-Blueprint"><a href="#My-First-Blueprint" class="headerlink" title="My First Blueprint"></a>My First Blueprint</h2><p>The following shows a very simple blueprint that registers a handler-function at<br>the root <code>/</code> of your application.</p>
+<p>Suppose you save this file as <code>my_blueprint.py</code>, this can be imported in your<br>main application later.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Blueprint</div><div class="line"></div><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bp_root</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123;<span class="string">'my'</span>: <span class="string">'blueprint'</span>&#125;)</div></pre></td></tr></table></figure>
+<h2 id="Registering-Blueprints"><a href="#Registering-Blueprints" class="headerlink" title="Registering Blueprints"></a>Registering Blueprints</h2><p>Blueprints must be registered with the application.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> my_blueprint <span class="keyword">import</span> bp</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line">app.blueprint(bp)</div><div class="line"></div><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+<p>This will add the blueprint to the application and register any routes defined<br>by that blueprint.<br>In this example, the registered routes in the <code>app.router</code> will look like:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Route(handler=&lt;function bp_root at <span class="number">0x7f908382f9d8</span>&gt;, methods=<span class="keyword">None</span>, pattern=re.compile(<span class="string">'^/$'</span>), parameters=[])]</div></pre></td></tr></table></figure>
+<h2 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h2><p>Using blueprints allows you to also register middleware globally.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div></pre></td></tr></table></figure>
+<h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><p>Exceptions can also be applied exclusively to blueprints globally.</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div><div class="line"></div><div class="line"><span class="comment">## Static files</span></div><div class="line">Static files can also be served globally, under the blueprint prefix.</div><div class="line"></div><div class="line">```python</div><div class="line">bp.static(<span class="string">'/folder/to/serve'</span>, <span class="string">'/web/path'</span>)</div></pre></td></tr></table></figure>
+<h2 id="Start-and-Stop"><a href="#Start-and-Stop" class="headerlink" title="Start and Stop"></a>Start and Stop</h2><p>Blueprints and run functions during the start and stop process of the server.<br>If running in multiprocessor mode (more than 1 worker), these are triggered after the workers fork<br>Available events are:</p>
+<ul>
+<li>before_server_start - Executed before the server begins to accept connections</li>
+<li>after_server_start - Executed after the server begins to accept connections</li>
+<li>before_server_stop - Executed before the server stops accepting connections</li>
+<li>after_server_stop - Executed after the server is stopped and all requests are complete</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.listen('before_server_start')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">setup_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">global</span> database</div><div class="line">    database = mysql.connect(host=<span class="string">'127.0.0.1'</span>...)</div><div class="line">    </div><div class="line"><span class="meta">@bp.listen('after_server_stop')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">close_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">await</span> database.close()</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
         <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/request_data/">2016-12-24</a></time>
       
       
@@ -139,6 +400,42 @@
 <p><code>request.files</code> (dictionary of File objects) - List of files that have a name, body, and type<br><code>request.json</code> (any) - JSON body<br><code>request.args</code> (dict) - Query String variables.  Use getlist to get multiple of the same name<br><code>request.form</code> (dict) - Posted form variables.  Use getlist to get multiple of the same name<br><code>request.body</code> (bytes) - Posted raw body.  To get the raw data, regardless of content type  </p>
 <p>See request.py for more information</p>
 <h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json, text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/json")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"message"</span>: request.json &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/form")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"form_data"</span>: request.form, <span class="string">"test"</span>: request.form.get(<span class="string">'test'</span>) &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/files")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">post_json</span><span class="params">(request)</span>:</span></div><div class="line">	test_file = request.files.get(<span class="string">'test'</span>)</div><div class="line"></div><div class="line">	file_parameters = &#123;</div><div class="line">		<span class="string">'body'</span>: test_file.body,</div><div class="line">		<span class="string">'name'</span>: test_file.name,</div><div class="line">		<span class="string">'type'</span>: test_file.type,</div><div class="line">	&#125;</div><div class="line"></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"received"</span>: <span class="keyword">True</span>, <span class="string">"file_names"</span>: request.files.keys(), <span class="string">"test_file_parameters"</span>: file_parameters &#125;)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/query_string")</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">query_string</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"parsed"</span>: <span class="keyword">True</span>, <span class="string">"args"</span>: request.args, <span class="string">"url"</span>: request.url, <span class="string">"query_string"</span>: request.query_string &#125;)</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@app.route("/users", methods=["POST",])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">create_user</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">"You are trying to create a user with the following POST: %s"</span> % request.body)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/class_based_views/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/class_based_views/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Class-based-views"><a href="#Class-based-views" class="headerlink" title="Class based views"></a>Class based views</h1><p>Sanic has simple class based implementation. You should implement methods(get, post, put, patch, delete) for the class to every HTTP method you want to support. If someone tries to use a method that has not been implemented, there will be 405 response.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.views <span class="keyword">import</span> HTTPMethodView</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line">app = Sanic(<span class="string">'some_name'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am get method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am post method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am put method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">patch</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am patch method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am delete method'</span>)</div><div class="line"></div><div class="line">app.add_route(SimpleView(), <span class="string">'/'</span>)</div></pre></td></tr></table></figure>
+<p>If you need any url params just mention them in method definition:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NameView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, name)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">'Hello &#123;&#125;'</span>.format(name))</div><div class="line"></div><div class="line">app.add_route(NameView(), <span class="string">'/&lt;name&gt;'</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -233,228 +530,18 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/getting_started/">2016-12-24</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/24/getting_started/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h1><p>Make sure you have pip and python 3.5 before starting</p>
-<h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h2><ul>
-<li>Install Sanic</li>
-<li><code>python3 -m pip install sanic</code></li>
-<li><p>Edit main.py to include:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"hello"</span>: <span class="string">"world"</span> &#125;)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
-</li>
-<li><p>Run <code>python3 main.py</code></p>
-</li>
-</ul>
-<p>You now have a working Sanic server!  To continue on, check out:</p>
-<ul>
-<li><a href="request_data.md">Request Data</a></li>
-<li><a href="routing.md">Routing</a></li>
-</ul>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/middleware/">2016-12-24</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/24/middleware/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h1><p>Middleware can be executed before or after requests.  It is executed in the order it was registered.  If middleware returns a response object, the request will stop processing and a response will be returned.</p>
-<p>Middleware is registered via the middleware decorator, and can either be added as ‘request’ or ‘response’ middleware, based on the argument provided in the decorator.  Response middleware receives both the request and the response as arguments.</p>
-<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I would like to speak now please'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
-<h2 id="Middleware-chain"><a href="#Middleware-chain" class="headerlink" title="Middleware chain"></a>Middleware chain</h2><p>If you want to apply the middleware as a chain, applying more than one, is so easy. You only have to be aware that you do <strong>not return</strong> any response in your middleware:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">custom_banner</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"Server"</span>] = <span class="string">"Fake-Server"</span></div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">prevent_xss</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"x-xss-protection"</span>] = <span class="string">"1; mode=block"</span></div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
-<p>The above code will apply the two middlewares in order. First the middleware <strong>custom_banner</strong> will change the HTTP Response headers <em>Server</em> by <em>Fake-Server</em>, and the second middleware <strong>prevent_xss</strong> will add the HTTP Headers for prevent Cross-Site-Scripting (XSS) attacks.</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/class_based_views/">2016-12-24</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/24/class_based_views/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="Class-based-views"><a href="#Class-based-views" class="headerlink" title="Class based views"></a>Class based views</h1><p>Sanic has simple class based implementation. You should implement methods(get, post, put, patch, delete) for the class to every HTTP method you want to support. If someone tries to use a method that has not been implemented, there will be 405 response.</p>
-<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.views <span class="keyword">import</span> HTTPMethodView</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line">app = Sanic(<span class="string">'some_name'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am get method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am post method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am put method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">patch</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am patch method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am delete method'</span>)</div><div class="line"></div><div class="line">app.add_route(SimpleView(), <span class="string">'/'</span>)</div></pre></td></tr></table></figure>
-<p>If you need any url params just mention them in method definition:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NameView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, name)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">'Hello &#123;&#125;'</span>.format(name))</div><div class="line"></div><div class="line">app.add_route(NameView(), <span class="string">'/&lt;name&gt;'</span>)</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/blueprints/">2016-12-24</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/24/blueprints/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="Blueprints"><a href="#Blueprints" class="headerlink" title="Blueprints"></a>Blueprints</h1><p>Blueprints are objects that can be used for sub-routing within an application.<br>Instead of adding routes to the application object, blueprints define similar<br>methods for adding routes, which are then registered with the application in a<br>flexible and pluggable manner.</p>
-<h2 id="Why"><a href="#Why" class="headerlink" title="Why?"></a>Why?</h2><p>Blueprints are especially useful for larger applications, where your application<br>logic can be broken down into several groups or areas of responsibility.</p>
-<p>It is also useful for API versioning, where one blueprint may point at<br><code>/v1/&lt;routes&gt;</code>, and another pointing at <code>/v2/&lt;routes&gt;</code>.</p>
-<h2 id="My-First-Blueprint"><a href="#My-First-Blueprint" class="headerlink" title="My First Blueprint"></a>My First Blueprint</h2><p>The following shows a very simple blueprint that registers a handler-function at<br>the root <code>/</code> of your application.</p>
-<p>Suppose you save this file as <code>my_blueprint.py</code>, this can be imported in your<br>main application later.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Blueprint</div><div class="line"></div><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">bp_root</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123;<span class="string">'my'</span>: <span class="string">'blueprint'</span>&#125;)</div></pre></td></tr></table></figure>
-<h2 id="Registering-Blueprints"><a href="#Registering-Blueprints" class="headerlink" title="Registering Blueprints"></a>Registering Blueprints</h2><p>Blueprints must be registered with the application.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> my_blueprint <span class="keyword">import</span> bp</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line">app.blueprint(bp)</div><div class="line"></div><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
-<p>This will add the blueprint to the application and register any routes defined<br>by that blueprint.<br>In this example, the registered routes in the <code>app.router</code> will look like:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">[Route(handler=&lt;function bp_root at <span class="number">0x7f908382f9d8</span>&gt;, methods=<span class="keyword">None</span>, pattern=re.compile(<span class="string">'^/$'</span>), parameters=[])]</div></pre></td></tr></table></figure>
-<h2 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h2><p>Using blueprints allows you to also register middleware globally.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div></pre></td></tr></table></figure>
-<h2 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h2><p>Exceptions can also be applied exclusively to blueprints globally.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@bp.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div><div class="line"></div><div class="line"><span class="comment">## Static files</span></div><div class="line">Static files can also be served globally, under the blueprint prefix.</div><div class="line"></div><div class="line">```python</div><div class="line">bp.static(<span class="string">'/folder/to/serve'</span>, <span class="string">'/web/path'</span>)</div></pre></td></tr></table></figure>
-<h2 id="Start-and-Stop"><a href="#Start-and-Stop" class="headerlink" title="Start and Stop"></a>Start and Stop</h2><p>Blueprints and run functions during the start and stop process of the server.<br>If running in multiprocessor mode (more than 1 worker), these are triggered after the workers fork<br>Available events are:</p>
-<ul>
-<li>before_server_start - Executed before the server begins to accept connections</li>
-<li>after_server_start - Executed after the server begins to accept connections</li>
-<li>before_server_stop - Executed before the server stops accepting connections</li>
-<li>after_server_stop - Executed after the server is stopped and all requests are complete</li>
-</ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">bp = Blueprint(<span class="string">'my_blueprint'</span>)</div><div class="line"></div><div class="line"><span class="meta">@bp.listen('before_server_start')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">setup_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">global</span> database</div><div class="line">    database = mysql.connect(host=<span class="string">'127.0.0.1'</span>...)</div><div class="line">    </div><div class="line"><span class="meta">@bp.listen('after_server_stop')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">close_connection</span><span class="params">()</span>:</span></div><div class="line">    <span class="keyword">await</span> database.close()</div></pre></td></tr></table></figure>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/exceptions/">2016-12-24</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/12/24/exceptions/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="Exceptions"><a href="#Exceptions" class="headerlink" title="Exceptions"></a>Exceptions</h1><p>Exceptions can be thrown from within request handlers and will automatically be handled by Sanic.  Exceptions take a message as their first argument, and can also take a status_code to be passed back in the HTTP response.  Check sanic.exceptions for the full list of exceptions to throw.</p>
-<h2 id="Throwing-an-exception"><a href="#Throwing-an-exception" class="headerlink" title="Throwing an exception"></a>Throwing an exception</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> ServerError</div><div class="line"></div><div class="line"><span class="meta">@app.route('/killme')</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">i_am_ready_to_die</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">raise</span> ServerError(<span class="string">"Something bad happened"</span>)</div></pre></td></tr></table></figure>
-<h2 id="Handling-Exceptions"><a href="#Handling-Exceptions" class="headerlink" title="Handling Exceptions"></a>Handling Exceptions</h2><p>Just use the @exception decorator.  The decorator expects a list of exceptions to handle as arguments.  You can pass SanicException to catch them all!  The exception handler must expect a request and exception object as arguments.</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"><span class="keyword">from</span> sanic.exceptions <span class="keyword">import</span> NotFound</div><div class="line"></div><div class="line"><span class="meta">@app.exception(NotFound)</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">ignore_404s</span><span class="params">(request, exception)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">"Yep, I totally found the page: &#123;&#125;"</span>.format(request.url))</div></pre></td></tr></table></figure>
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
   
-    <a href="/page/2/" class="alignright next">Nächste Seite</a>
+    <a href="/page/2/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>

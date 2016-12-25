@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 2 | Taylor|Here</title>
+  <title>Page 2 | Taylor|Here</title>
   <meta name="author" content="Taylor Lee">
   
   <meta name="description" content="Taylor&#39;s blog|python|android|java|js|">
@@ -52,34 +52,32 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/cookies/">2016-12-24</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/getting_started/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/12/24/cookies/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/getting_started/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="Cookies"><a href="#Cookies" class="headerlink" title="Cookies"></a>Cookies</h1><h2 id="Request"><a href="#Request" class="headerlink" title="Request"></a>Request</h2><p>Request cookies can be accessed via the request.cookie dictionary</p>
-<h3 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/cookie")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    test_cookie = request.cookies.get(<span class="string">'test'</span>)</div><div class="line">    <span class="keyword">return</span> text(<span class="string">"Test cookie set to: &#123;&#125;"</span>.format(test_cookie))</div></pre></td></tr></table></figure>
-<h2 id="Response"><a href="#Response" class="headerlink" title="Response"></a>Response</h2><p>Response cookies can be set like dictionary values and<br>have the following parameters available:</p>
-<ul>
-<li>expires - datetime - Time for cookie to expire on the client’s browser</li>
-<li>path - string - The Path attribute specifies the subset of URLs to <pre><code>which this cookie applies
-</code></pre></li>
-<li>comment - string - Cookie comment (metadata)</li>
-<li>domain - string - Specifies the domain for which the<pre><code>cookie is valid.  An explicitly specified domain must always 
-start with a dot.
-</code></pre></li>
-<li>max-age - number - Number of seconds the cookie should live for</li>
-<li>secure - boolean - Specifies whether the cookie will only be sent via<pre><code>HTTPS
-</code></pre></li>
-<li>httponly - boolean - Specifies whether the cookie cannot be read<pre><code>by javascript
-</code></pre></li>
+        <h1 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h1><p>Make sure you have pip and python 3.5 before starting</p>
+<h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h2><ul>
+<li>Install Sanic</li>
+<li><code>python3 -m pip install sanic</code></li>
+<li><p>Edit main.py to include:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"></div><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123; <span class="string">"hello"</span>: <span class="string">"world"</span> &#125;)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>, debug=<span class="keyword">True</span>)</div></pre></td></tr></table></figure>
+</li>
+<li><p>Run <code>python3 main.py</code></p>
+</li>
 </ul>
-<h3 id="Example-1"><a href="#Example-1" class="headerlink" title="Example"></a>Example</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line"><span class="meta">@app.route("/cookie")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    response = text(<span class="string">"There's a cookie up in this response"</span>)</div><div class="line">    response.cookies[<span class="string">'test'</span>] = <span class="string">'It worked!'</span></div><div class="line">    response.cookies[<span class="string">'test'</span>][<span class="string">'domain'</span>] = <span class="string">'.gotta-go-fast.com'</span></div><div class="line">    response.cookies[<span class="string">'test'</span>][<span class="string">'httponly'</span>] = <span class="keyword">True</span></div><div class="line">    <span class="keyword">return</span> response</div></pre></td></tr></table></figure>
+<p>You now have a working Sanic server!  To continue on, check out:</p>
+<ul>
+<li><a href="request_data.md">Request Data</a></li>
+<li><a href="routing.md">Routing</a></li>
+</ul>
+
       
     </div>
     <footer>
@@ -101,23 +99,62 @@ start with a dot.
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/contributing/">2016-12-24</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/middleware/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/12/24/contributing/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/middleware/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="How-to-contribute-to-Sanic"><a href="#How-to-contribute-to-Sanic" class="headerlink" title="How to contribute to Sanic"></a>How to contribute to Sanic</h1><p>Thank you for your interest!</p>
-<h2 id="Running-tests"><a href="#Running-tests" class="headerlink" title="Running tests"></a>Running tests</h2><ul>
-<li><code>python -m pip install pytest</code></li>
-<li><code>python -m pytest tests</code></li>
-</ul>
-<h2 id="Warning"><a href="#Warning" class="headerlink" title="Warning"></a>Warning</h2><p>One of the main goals of Sanic is speed.  Code that lowers the performance of Sanic without significant gains in usability, security, or features may not be merged.</p>
+        <h1 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h1><p>Middleware can be executed before or after requests.  It is executed in the order it was registered.  If middleware returns a response object, the request will stop processing and a response will be returned.</p>
+<p>Middleware is registered via the middleware decorator, and can either be added as ‘request’ or ‘response’ middleware, based on the argument provided in the decorator.  Response middleware receives both the request and the response as arguments.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I would like to speak now please'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<h2 id="Middleware-chain"><a href="#Middleware-chain" class="headerlink" title="Middleware chain"></a>Middleware chain</h2><p>If you want to apply the middleware as a chain, applying more than one, is so easy. You only have to be aware that you do <strong>not return</strong> any response in your middleware:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">custom_banner</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"Server"</span>] = <span class="string">"Fake-Server"</span></div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">prevent_xss</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"x-xss-protection"</span>] = <span class="string">"1; mode=block"</span></div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<p>The above code will apply the two middlewares in order. First the middleware <strong>custom_banner</strong> will change the HTTP Response headers <em>Server</em> by <em>Fake-Server</em>, and the second middleware <strong>prevent_xss</strong> will add the HTTP Headers for prevent Cross-Site-Scripting (XSS) attacks.</p>
 
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/deploying/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/deploying/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Deploying"><a href="#Deploying" class="headerlink" title="Deploying"></a>Deploying</h1><p>When it comes to deploying Sanic, there’s not much to it, but there are<br>a few things to take note of.</p>
+<h2 id="Workers"><a href="#Workers" class="headerlink" title="Workers"></a>Workers</h2><p>By default, Sanic listens in the main process using only 1 CPU core.<br>To crank up the juice, just specify the number of workers in the run<br>arguments like so:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+<p>Sanic will automatically spin up multiple processes and route<br>traffic between them.  We recommend as many workers as you have<br>available cores.</p>
+<h2 id="Running-via-Command"><a href="#Running-via-Command" class="headerlink" title="Running via Command"></a>Running via Command</h2><p>If you like using command line arguments, you can launch a sanic server<br>by executing the module.  For example, if you initialized sanic as<br>app in a file named server.py, you could run the server like so:</p>
+<p><code>python -m sanic server.app --host=0.0.0.0 --port=1337 --workers=4</code></p>
+<p>With this way of running sanic, it is not necessary to run app.run in<br>your python file.  If you do, just make sure you wrap it in name == main<br>like so:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
       
     </div>
     <footer>
@@ -626,53 +663,20 @@ start with a dot.
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-10T17:06:52.000Z"><a href="/2016/08/11/The Zen of Python, by Tim Peters/">2016-08-11</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/11/The Zen of Python, by Tim Peters/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="The-Zen-of-Python-by-Tim-Peters"><a href="#The-Zen-of-Python-by-Tim-Peters" class="headerlink" title="The Zen of Python, by Tim Peters"></a>The Zen of Python, by Tim Peters</h1><p>Beautiful is better than ugly.<br>Explicit is better than implicit.<br>Simple is better than complex.<br>Complex is better than complicated.<br>Flat is better than nested.<br>Sparse is better than dense.<br>Readability counts.<br>Special cases aren’t special enough to break the rules.<br>Although practicality beats purity.<br>Errors should never pass silently.<br>Unless explicitly silenced.<br>In the face of ambiguity, refuse the temptation to guess.<br>There should be one– and preferably only one –obvious way to do it.<br>Although that way may not be obvious at first unless you’re Dutch.<br>Now is better than never.<br>Although never is often better than <em>right</em> now.<br>If the implementation is hard to explain, it’s a bad idea.<br>If the implementation is easy to explain, it may be a good idea.<br>Namespaces are one honking great idea – let’s do more of those!</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/" class="alignleft prev">Prev</a>
   
   
-    <a href="/page/3/" class="alignright next">Nächste Seite</a>
+    <a href="/page/3/" class="alignright next">Next</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Search">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>

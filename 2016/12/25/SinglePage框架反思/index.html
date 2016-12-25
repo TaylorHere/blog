@@ -1,0 +1,245 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <meta charset="utf-8">
+  
+  <title>Taylor|Here</title>
+  <meta name="author" content="Taylor Lee">
+  
+  <meta name="description" content="Taylor&#39;s blog|python|android|java|js|">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  
+  <meta property="og:site_name" content="Taylor|Here"/>
+
+  
+    <meta property="og:image" content="undefined"/>
+  
+
+  <link href="/favicon.png" rel="icon">
+  <link rel="alternate" href="/atom.xml" title="Taylor|Here" type="application/atom+xml">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <!--[if lt IE 9]><script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script><![endif]-->
+  
+
+</head>
+
+
+<body>
+  <header id="header" class="inner"><div class="alignleft">
+  <h1><a href="/">Taylor|Here</a></h1>
+  <h2><a href="/">seize the day</a></h2>
+</div>
+<nav id="main-nav" class="alignright">
+  <ul>
+    
+      <li><a href="/">Home</a></li>
+    
+      <li><a href="/archives">Archives</a></li>
+    
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="clearfix"></div>
+</header>
+  <div id="content" class="inner">
+    <div id="main-col" class="alignleft"><div id="wrapper"><article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T18:41:32.000Z"><a href="/2016/12/25/SinglePage框架反思/">2016-12-25</a></time>
+      
+      
+  
+    <h1 class="title"></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <p>12／24号下午接触了一个比较新的框架，<a href="https://github.com/channelcat/sanic" target="_blank" rel="external">sanic</a></p>
+<p>据作者描述，sanic框架非常快。</p>
+<p>以下是性能对比</p>
+<h2 id="Benchmarks"><a href="#Benchmarks" class="headerlink" title="Benchmarks"></a>Benchmarks</h2><p>所有测试均运行在AWS单核中型机上，Ubuntu系统。 </p>
+<table>
+<thead>
+<tr>
+<th>Server</th>
+<th>Implementation</th>
+<th style="text-align:right">Requests/sec</th>
+<th style="text-align:right">Avg Latency</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Sanic</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">33,342</td>
+<td style="text-align:right">2.96ms</td>
+</tr>
+<tr>
+<td>Wheezy</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">20,244</td>
+<td style="text-align:right">4.94ms</td>
+</tr>
+<tr>
+<td>Falcon</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">18,972</td>
+<td style="text-align:right">5.27ms</td>
+</tr>
+<tr>
+<td>Bottle</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">13,596</td>
+<td style="text-align:right">7.36ms</td>
+</tr>
+<tr>
+<td>Flask</td>
+<td>gunicorn + meinheld</td>
+<td style="text-align:right">4,988</td>
+<td style="text-align:right">20.08ms</td>
+</tr>
+<tr>
+<td>Kyoukai</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">3,889</td>
+<td style="text-align:right">27.44ms</td>
+</tr>
+<tr>
+<td>Aiohttp</td>
+<td>Python 3.5 + uvloop</td>
+<td style="text-align:right">2,979</td>
+<td style="text-align:right">33.42ms</td>
+</tr>
+<tr>
+<td>Tornado</td>
+<td>Python 3.5</td>
+<td style="text-align:right">2,138</td>
+<td style="text-align:right">46.66ms</td>
+</tr>
+</tbody>
+</table>
+<p>还有一个重点在于这个框架长得和flask特别像。</p>
+<h2 id="Hello-World"><a href="#Hello-World" class="headerlink" title="Hello World"></a>Hello World</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> json</div><div class="line"></div><div class="line"></div><div class="line">app = Sanic()</div><div class="line"></div><div class="line"></div><div class="line"><span class="meta">@app.route("/")</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">test</span><span class="params">(request)</span>:</span></div><div class="line">    <span class="keyword">return</span> json(&#123;<span class="string">"hello"</span>: <span class="string">"world"</span>&#125;)</div><div class="line"></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</div><div class="line">    app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<p>所以花了几个小时将自己的RESTful框架<a href="https://github.com/TaylorHere/SinglePage" target="_blank" rel="external">SinglePage</a>改为Sanic实现，以下是一些记录和对SinglePage框架的方式：</p>
+<h3 id="Sanic和Flask的路由系统的异同："><a href="#Sanic和Flask的路由系统的异同：" class="headerlink" title="Sanic和Flask的路由系统的异同："></a>Sanic和Flask的路由系统的异同：</h3><p>​    他们均可以把url字符串注册到方法或者类上，同时注册方法的时可以在url中配置参数映射为方法的参数，比如：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> flask <span class="keyword">import</span> *</div><div class="line"><span class="comment"># or from sanic import *</span></div><div class="line">app = Flask(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="meta">@app.route('/url/&lt;int:id&gt;',methods=['GET'])</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">url_sample</span><span class="params">(id)</span>:</span></div><div class="line">	<span class="keyword">print</span> id</div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>这个例子中可以通过访问/url/1 打印出 1.</p>
+<p>但Flask和Sanic在route实现上有细微的差别：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">#Flask router add </span></div><div class="line"></div><div class="line"><span class="comment">#Sanic router add </span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">add</span><span class="params">(self, uri, methods, handler)</span>:</span></div><div class="line">        <span class="string">"""</span></div><div class="line">        Adds a handler to the route list</div><div class="line">        :param uri: Path to match</div><div class="line">        :param methods: Array of accepted method names.</div><div class="line">        If none are provided, any method is allowed</div><div class="line">        :param handler: Request handler function.</div><div class="line">        When executed, it should provide a response object.</div><div class="line">        :return: Nothing</div><div class="line">        """</div></pre></td></tr></table></figure>
+<p>Sanic 的route实现中，uri中的parameter没有与方法绑定而是处理对象绑定</p>
+<p>也就是说当你定义了基于类的处理对象</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> *</div><div class="line">app = Sanic(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMethodView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.add_route(MyMethodView, <span class="string">'/uri/&lt;pk&gt;'</span>)</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>我们期待的get方法中拥有一个pk参数，但事实上</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> *</div><div class="line">app = Sanic(__name__)</div><div class="line"><span class="comment"># or app = Sanic(__name__)</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyMethodView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line">    <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(request,pk)</span>:</span></div><div class="line">        <span class="keyword">pass</span></div><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.add_route(MyMethodView, <span class="string">'/uri/&lt;pk&gt;'</span>)</div><div class="line">    app.run()</div></pre></td></tr></table></figure>
+<p>put方法也拥有pk参数</p>
+<p>Flask中不存在这样的问题</p>
+<h3 id="Flask和Sanic都有蓝图的实现"><a href="#Flask和Sanic都有蓝图的实现" class="headerlink" title="Flask和Sanic都有蓝图的实现"></a>Flask和Sanic都有蓝图的实现</h3><p>Flask和Sanic还有一个显著的差别，</p>
+<p>Flask的Request对象对于消费者来说是一个全局的对象</p>
+<p>Sanic的Request对象是具体处理方法中的一个参数。</p>
+<h3 id="Sanic的特性"><a href="#Sanic的特性" class="headerlink" title="Sanic的特性"></a>Sanic的特性</h3><p>Sanic和Django一样推崇中间件</p>
+<p>但是Sanic的中间件设计有一个问题，中间件处理函数中无法获知具体的handler实例引用</p>
+<p>而request对象也无法添加任何信息，这导致了中间件只能做request和response的处理，其它处理，均不能结合处理实例，所以中间件连数据库连接这中事都做不了。</p>
+<p>基于类的处理实现HTTPMethodView</p>
+<p>并不会在每次request过来时都会新生成实例，而是全局共用一个实例。</p>
+<h3 id="对SinglePage的反思"><a href="#对SinglePage的反思" class="headerlink" title="对SinglePage的反思"></a>对SinglePage的反思</h3><p>SinglePage换为Sanic实现后并没有获得性能上的飞速增长，只有小幅度的提升。</p>
+<p>可能原因有下：</p>
+<p>​    1/数据库连接，全局通用一个session，这可能导致注阻塞</p>
+<p>​    2/内容序列化，SinglePage最大的特点就是能自动将处理对象的返回进行序列化生成标准的JSON数据，但是目前的序列化实现是蠢python的递归实现，这个实现本身比较缓慢，其次如果返回有1000条，序列化器会对这1000条数据每条进行结构探索，生产字典或列表。</p>
+<p>但实际上这1000条的数据等结构是相同的，唯一的差别在于数据的值，所以应该仿造Flask和Sanic的URI实现，只在程序拉起起时进行一次序列化结构探索，并将结果缓存，然后对返回通过这个缓存来获取值，这样同时能实现前端定义返回结构的功能。</p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+        
+  <div class="addthis addthis_toolbox addthis_default_style">
+    
+      <a class="addthis_button_facebook_like" fb:like:layout="button_count"></a>
+    
+    
+      <a class="addthis_button_tweet"></a>
+    
+    
+      <a class="addthis_button_google_plusone" g:plusone:size="medium"></a>
+    
+    
+      <a class="addthis_button_pinterest_pinit" pi:pinit:layout="horizontal"></a>
+    
+    <a class="addthis_counter addthis_pill_style"></a>
+  </div>
+  <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js"></script>
+
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+<section id="comment">
+  <h1 class="title">Comments</h1>
+
+  
+      <div id="fb-root"></div>
+<script>
+  (function(d, s, id) {
+    var js, fjs = d.getElementsByTagName(s)[0];
+    if (d.getElementById(id)) return;
+    js = d.createElement(s); js.id = id;
+    js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=123456789012345";
+    fjs.parentNode.insertBefore(js, fjs);
+  }(document, 'script', 'facebook-jssdk'));
+</script>
+
+<div class="fb-comments" data-href="http://yoursite.com/2016/12/25/SinglePage框架反思/index.html" data-num-posts="5" data-width="840" data-colorscheme="light"></div>
+      
+  
+</section>
+
+</div></div>
+    <aside id="sidebar" class="alignright">
+  <div class="search">
+  <form action="//google.com/search" method="get" accept-charset="utf-8">
+    <input type="search" name="q" results="0" placeholder="Search">
+    <input type="hidden" name="q" value="site:yoursite.com">
+  </form>
+</div>
+
+  
+
+  
+</aside>
+    <div class="clearfix"></div>
+  </div>
+  <footer id="footer" class="inner"><div class="alignleft">
+  
+  &copy; 2016 Taylor Lee
+  
+</div>
+<div class="clearfix"></div></footer>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+
+
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+</body>
+</html>
