@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 2 | Taylor|Here</title>
+  <title>Página 2 | Taylor|Here</title>
   <meta name="author" content="Taylor Lee">
   
   <meta name="description" content="Taylor&#39;s blog|python|android|java|js|">
@@ -46,6 +46,40 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/static_files/">2016-12-24</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/12/24/static_files/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="Static-Files"><a href="#Static-Files" class="headerlink" title="Static Files"></a>Static Files</h1><p>Both directories and files can be served by registering with static</p>
+<h2 id="Example"><a href="#Example" class="headerlink" title="Example"></a>Example</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="comment"># Serves files from the static folder to the URL /static</span></div><div class="line">app.static(<span class="string">'/static'</span>, <span class="string">'./static'</span>)</div><div class="line"></div><div class="line"><span class="comment"># Serves the file /home/ubuntu/test.png when the URL /the_best.png</span></div><div class="line"><span class="comment"># is requested</span></div><div class="line">app.static(<span class="string">'/the_best.png'</span>, <span class="string">'/home/ubuntu/test.png'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -99,22 +133,20 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/middleware/">2016-12-24</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/class_based_views/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/12/24/middleware/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/class_based_views/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h1><p>Middleware can be executed before or after requests.  It is executed in the order it was registered.  If middleware returns a response object, the request will stop processing and a response will be returned.</p>
-<p>Middleware is registered via the middleware decorator, and can either be added as ‘request’ or ‘response’ middleware, based on the argument provided in the decorator.  Response middleware receives both the request and the response as arguments.</p>
-<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I would like to speak now please'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
-<h2 id="Middleware-chain"><a href="#Middleware-chain" class="headerlink" title="Middleware chain"></a>Middleware chain</h2><p>If you want to apply the middleware as a chain, applying more than one, is so easy. You only have to be aware that you do <strong>not return</strong> any response in your middleware:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">custom_banner</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"Server"</span>] = <span class="string">"Fake-Server"</span></div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">prevent_xss</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"x-xss-protection"</span>] = <span class="string">"1; mode=block"</span></div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
-<p>The above code will apply the two middlewares in order. First the middleware <strong>custom_banner</strong> will change the HTTP Response headers <em>Server</em> by <em>Fake-Server</em>, and the second middleware <strong>prevent_xss</strong> will add the HTTP Headers for prevent Cross-Site-Scripting (XSS) attacks.</p>
+        <h1 id="Class-based-views"><a href="#Class-based-views" class="headerlink" title="Class based views"></a>Class based views</h1><p>Sanic has simple class based implementation. You should implement methods(get, post, put, patch, delete) for the class to every HTTP method you want to support. If someone tries to use a method that has not been implemented, there will be 405 response.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">from</span> sanic <span class="keyword">import</span> Sanic</div><div class="line"><span class="keyword">from</span> sanic.views <span class="keyword">import</span> HTTPMethodView</div><div class="line"><span class="keyword">from</span> sanic.response <span class="keyword">import</span> text</div><div class="line"></div><div class="line">app = Sanic(<span class="string">'some_name'</span>)</div><div class="line"></div><div class="line"></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SimpleView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am get method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">post</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am post method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">put</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am put method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">patch</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am patch method'</span>)</div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">delete</span><span class="params">(self, request)</span>:</span></div><div class="line">      <span class="keyword">return</span> text(<span class="string">'I am delete method'</span>)</div><div class="line"></div><div class="line">app.add_route(SimpleView(), <span class="string">'/'</span>)</div></pre></td></tr></table></figure>
+<p>If you need any url params just mention them in method definition:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">NameView</span><span class="params">(HTTPMethodView)</span>:</span></div><div class="line"></div><div class="line">  <span class="function"><span class="keyword">def</span> <span class="title">get</span><span class="params">(self, request, name)</span>:</span></div><div class="line">    <span class="keyword">return</span> text(<span class="string">'Hello &#123;&#125;'</span>.format(name))</div><div class="line"></div><div class="line">app.add_route(NameView(), <span class="string">'/&lt;name&gt;'</span>)</div></pre></td></tr></table></figure>
 
       
     </div>
@@ -137,24 +169,23 @@
     <header>
       
         <div class="icon"></div>
-        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/deploying/">2016-12-24</a></time>
+        <time datetime="2016-12-24T07:52:11.000Z"><a href="/2016/12/24/middleware/">2016-12-24</a></time>
       
       
   
-    <h1 class="title"><a href="/2016/12/24/deploying/"></a></h1>
+    <h1 class="title"><a href="/2016/12/24/middleware/"></a></h1>
   
 
     </header>
     <div class="entry">
       
-        <h1 id="Deploying"><a href="#Deploying" class="headerlink" title="Deploying"></a>Deploying</h1><p>When it comes to deploying Sanic, there’s not much to it, but there are<br>a few things to take note of.</p>
-<h2 id="Workers"><a href="#Workers" class="headerlink" title="Workers"></a>Workers</h2><p>By default, Sanic listens in the main process using only 1 CPU core.<br>To crank up the juice, just specify the number of workers in the run<br>arguments like so:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
-<p>Sanic will automatically spin up multiple processes and route<br>traffic between them.  We recommend as many workers as you have<br>available cores.</p>
-<h2 id="Running-via-Command"><a href="#Running-via-Command" class="headerlink" title="Running via Command"></a>Running via Command</h2><p>If you like using command line arguments, you can launch a sanic server<br>by executing the module.  For example, if you initialized sanic as<br>app in a file named server.py, you could run the server like so:</p>
-<p><code>python -m sanic server.app --host=0.0.0.0 --port=1337 --workers=4</code></p>
-<p>With this way of running sanic, it is not necessary to run app.run in<br>your python file.  If you do, just make sure you wrap it in name == main<br>like so:</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</div><div class="line">    app.run(host=<span class="string">'0.0.0.0'</span>, port=<span class="number">1337</span>, workers=<span class="number">4</span>)</div></pre></td></tr></table></figure>
+        <h1 id="Middleware"><a href="#Middleware" class="headerlink" title="Middleware"></a>Middleware</h1><p>Middleware can be executed before or after requests.  It is executed in the order it was registered.  If middleware returns a response object, the request will stop processing and a response will be returned.</p>
+<p>Middleware is registered via the middleware decorator, and can either be added as ‘request’ or ‘response’ middleware, based on the argument provided in the decorator.  Response middleware receives both the request and the response as arguments.</p>
+<h2 id="Examples"><a href="#Examples" class="headerlink" title="Examples"></a>Examples</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	print(<span class="string">"I am a spy"</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('request')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_request</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the request'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">halt_response</span><span class="params">(request, response)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I halted the response'</span>)</div><div class="line"></div><div class="line"><span class="meta">@app.route('/')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">handler</span><span class="params">(request)</span>:</span></div><div class="line">	<span class="keyword">return</span> text(<span class="string">'I would like to speak now please'</span>)</div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<h2 id="Middleware-chain"><a href="#Middleware-chain" class="headerlink" title="Middleware chain"></a>Middleware chain</h2><p>If you want to apply the middleware as a chain, applying more than one, is so easy. You only have to be aware that you do <strong>not return</strong> any response in your middleware:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">app = Sanic(__name__)</div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">custom_banner</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"Server"</span>] = <span class="string">"Fake-Server"</span></div><div class="line"></div><div class="line"><span class="meta">@app.middleware('response')</span></div><div class="line"><span class="keyword">async</span> <span class="function"><span class="keyword">def</span> <span class="title">prevent_xss</span><span class="params">(request, response)</span>:</span></div><div class="line">	response.headers[<span class="string">"x-xss-protection"</span>] = <span class="string">"1; mode=block"</span></div><div class="line"></div><div class="line">app.run(host=<span class="string">"0.0.0.0"</span>, port=<span class="number">8000</span>)</div></pre></td></tr></table></figure>
+<p>The above code will apply the two middlewares in order. First the middleware <strong>custom_banner</strong> will change the HTTP Response headers <em>Server</em> by <em>Fake-Server</em>, and the second middleware <strong>prevent_xss</strong> will add the HTTP Headers for prevent Cross-Site-Scripting (XSS) attacks.</p>
+
       
     </div>
     <footer>
@@ -618,65 +649,20 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-08-21T08:17:25.000Z"><a href="/2016/08/21/微服务架构设计V0.1/">2016-08-21</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/08/21/微服务架构设计V0.1/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <h1 id="微服务架构设计大纲"><a href="#微服务架构设计大纲" class="headerlink" title="微服务架构设计大纲"></a>微服务架构设计大纲</h1><p>花草秀是一个大型的、多应用的、多技术栈的、多团队的项目，为了满足花草秀项目发展需要，现提出微服务架构体系。</p>
-<p>微服务架构的特点：一个完整的产品可以由多个服务构成，这些服务可以是整个项目的公用组件，场景如下：</p>
-<p>产品校园镖局，拥有用户系统，订单系统和支付系统</p>
-<p>微服务架构模式下可以拆分为：</p>
-<p>用户服务、订单服务、支付服务、</p>
-<p>这三个服务并不仅仅是用于校园镖局项目，同时可以用于其他项目，即一个服务并不是针对某一具体产品开发，而是针对某一具体问题，使用一个服务的方式是从服务系统里产生一个实例，这个实例提供了消费方相关的业务逻辑。</p>
-<h3 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h3><p>服务实例给消费者提供配置和数据查询和事件监听功能，服务自身拥有与特定问题相关的逻辑代码，服务拥有实例管理的能力。</p>
-<p>服务实例和消费者实例之间使用网络进行通信，服务实例内部使用异步消息队列向消费者发送事件\数据消息。</p>
-<p>服务实例应该保证链接的安全性。</p>
-<p>服务能够独立部署。</p>
-<p>服务可用由任何语言、框架编写。</p>
-<h2 id="python语言设计规范"><a href="#python语言设计规范" class="headerlink" title="python语言设计规范"></a>python语言设计规范</h2><p>内部队列使用RQ</p>
-<p> <img src="../../../../Desktop/Screen Shot 2016-08-26 at 14.50.20.png" alt="Screen Shot 2016-08-26 at 14.50.20"></p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/3/" class="alignright next">Nächste Seite</a>
+    <a href="/page/3/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
@@ -689,7 +675,7 @@
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 Taylor Lee
+  &copy; 2017 Taylor Lee
   
 </div>
 <div class="clearfix"></div></footer>

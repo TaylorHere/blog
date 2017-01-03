@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   
-  <title>Seite 3 | Taylor|Here</title>
+  <title>Página 3 | Taylor|Here</title>
   <meta name="author" content="Taylor Lee">
   
   <meta name="description" content="Taylor&#39;s blog|python|android|java|js|">
@@ -46,6 +46,51 @@
 </header>
   <div id="content" class="inner">
     <div id="main-col" class="alignleft"><div id="wrapper">
+  <article class="post">
+  
+  <div class="post-content">
+    <header>
+      
+        <div class="icon"></div>
+        <time datetime="2016-08-21T08:17:25.000Z"><a href="/2016/08/21/微服务架构设计V0.1/">2016-08-21</a></time>
+      
+      
+  
+    <h1 class="title"><a href="/2016/08/21/微服务架构设计V0.1/"></a></h1>
+  
+
+    </header>
+    <div class="entry">
+      
+        <h1 id="微服务架构设计大纲"><a href="#微服务架构设计大纲" class="headerlink" title="微服务架构设计大纲"></a>微服务架构设计大纲</h1><p>花草秀是一个大型的、多应用的、多技术栈的、多团队的项目，为了满足花草秀项目发展需要，现提出微服务架构体系。</p>
+<p>微服务架构的特点：一个完整的产品可以由多个服务构成，这些服务可以是整个项目的公用组件，场景如下：</p>
+<p>产品校园镖局，拥有用户系统，订单系统和支付系统</p>
+<p>微服务架构模式下可以拆分为：</p>
+<p>用户服务、订单服务、支付服务、</p>
+<p>这三个服务并不仅仅是用于校园镖局项目，同时可以用于其他项目，即一个服务并不是针对某一具体产品开发，而是针对某一具体问题，使用一个服务的方式是从服务系统里产生一个实例，这个实例提供了消费方相关的业务逻辑。</p>
+<h3 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h3><p>服务实例给消费者提供配置和数据查询和事件监听功能，服务自身拥有与特定问题相关的逻辑代码，服务拥有实例管理的能力。</p>
+<p>服务实例和消费者实例之间使用网络进行通信，服务实例内部使用异步消息队列向消费者发送事件\数据消息。</p>
+<p>服务实例应该保证链接的安全性。</p>
+<p>服务能够独立部署。</p>
+<p>服务可用由任何语言、框架编写。</p>
+<h2 id="python语言设计规范"><a href="#python语言设计规范" class="headerlink" title="python语言设计规范"></a>python语言设计规范</h2><p>内部队列使用RQ</p>
+<p> <img src="../../../../Desktop/Screen Shot 2016-08-26 at 14.50.20.png" alt="Screen Shot 2016-08-26 at 14.50.20"></p>
+
+      
+    </div>
+    <footer>
+      
+        
+        
+      
+      <div class="clearfix"></div>
+    </footer>
+  </div>
+</article>
+
+
+
+
   <article class="post">
   
   <div class="post-content">
@@ -496,68 +541,20 @@
 
 
 
-  <article class="post">
-  
-  <div class="post-content">
-    <header>
-      
-        <div class="icon"></div>
-        <time datetime="2016-04-04T07:47:06.000Z"><a href="/2016/04/04/通俗语言描述人工神经网络，反向传播算法，卷积神经网络－－人工神经网络/">2016-04-04</a></time>
-      
-      
-  
-    <h1 class="title"><a href="/2016/04/04/通俗语言描述人工神经网络，反向传播算法，卷积神经网络－－人工神经网络/"></a></h1>
-  
-
-    </header>
-    <div class="entry">
-      
-        <p>#通俗语言描述人工神经网络，反向传播算法，卷积神经网络－－人工神经网络<br>关键词：Artificial Neural Networks，ANN、Neural Networks ，NN、BackPropagation，BP、Convolutional Neural Network，CNN</p>
-<p>##什么是人工神经网络<br>人工神经网络是计算机科学领域的一个研究方向，主要是通过模仿生物神经网络的工作原理来做一些复杂的分类运算，总体来说神经网络只是一种计算方法，<a href="http://baike.baidu.com/link?url=g-wSWcRwWvqh7oVPnWaKM6bfWcYHFQVmxMrzuTLaW0haXkk2Km97LuMWCvWtPNlmOGkjyMUEyHdtUGwjNuL1sdD1ruCOeyddKh7IUJeWLLO" target="_blank" rel="external">它可以并行、容错、可以硬件实现以及自我学习特性，是神经网络的几个基本优点，也是神经网络计算方法与传统方法的区别所在。</a></p>
-<p>##神经网络的结构<br>一个神经网络由很多神经元组成，典型的神经网络和神经元如下图：<br>人工神经网络：<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l19855ycj20dv06zgm7.jpg" alt="人工神经网络"><br>人工神经网络神经元：<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2l1k9fxm4j209405u3yg.jpg" alt="人工神经网络神经元"><br>神经元<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l1lcl3rqj208a04xt8x.jpg" alt="神经元"><br>通过上图我们会发现神经网络是人工神经元组成的网络，并且每个人工神经元和真实的神经元极为相似，那么人造神经元是怎么模拟神经元工作的呢？</p>
-<p>###神经元的工作方式<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l1lcl3rqj208a04xt8x.jpg" alt="神经元"><br>一个神经元主要由树突＋细胞核＋轴突组成，一个神经元树突用来和其他神经元的轴突末梢相连接，神经元会传递电信号，而不同的链接的电信号传递的时间、强弱等都会有差别。</p>
-<p>###人造神经元的工作方式<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2l1k9fxm4j209405u3yg.jpg" alt="人工神经网络神经元"><br>一个人造神经元主要由输入路径＋激活函数＋输出路径组成，一个人造神经元的输入和其他人造神经元的输出相连接，人造神经元传递的是数值，而每条输入路径的长度或者说权重不同以模拟神经元的电信号传递的差别。<br>在上图中，x1、x2…xn是输入路径y是输出路径<br>输入经过激活函数后变为输出y传递出去<br>那么什么是<strong>激活函数</strong>呢？</p>
-<p>####什么是激活函数<br>激活函数是一种非线性函数，常用的激活函数是sigmoid<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l1nqjw9aj20b40b40tf.jpg" alt="sigmoid函数"><br>这是一种“S”型（sigmoid）函数,它的值域为(0,1)，曲线的顶部无限逼近1，底部无限逼近0，所以它可以表述输入x可能是某一类型的概率是多少，sigmoid函数的公式定义如下：<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2l1pc8tp7j202r00zmwx.jpg" alt="sigmoid"><br>假设s(x)=1的意义是输入x是A类，那么假设输入x＝2.20,那么s(x)≈0.8,的意义就是x为A类的概率为0.8.<br>也就是说这个函数具有把事物分成两类的能力，而这就是一个被激活的神经元应该做的事：<strong>把信号（或叫数据）分类</strong><br>事实上最简单的直线也能把数据分类，如下：<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l1qwp6f6j20go0ci3yj.jpg" alt="线性分类器"><br>但是直线的分类能力太差，比如以下数据：<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2l1shyjr0j20go0cia9y.jpg" alt="异或数据"><br>一条线可是不能分干净的。<br>这时就需要一个非线性的函数来做分类，这个函数就是sigmoid函数。<br>所以总的来说：<a href="http://www.zhihu.com/question/22334626/answer/21036590" target="_blank" rel="external">激活函数是用来加入非线性因素的，因为线性模型的表达能力不够。</a><br>事实上激活函数还要tanh、relu函数等，他们都有非线性，容易求导数，光滑等特征。</p>
-<p>###神经网络的结构<br>一个标准的神经网络如下：<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l19855ycj20dv06zgm7.jpg" alt="人工神经网络"><br>这个神经网络一共有三层，分别为输入层，隐藏层和输出层。<br>在输入层里，最左边三条青色的线是输入数据，最上方的那个神经元叫做bias－unit，偏执神经元，数据经过第一层后，经过权重和激活函数的运算转化为第二层的输入（并且神经元变少了），经过隐藏层后，最终输出层产生两个输出（比如可能是：0或1。<br>一个神经网络一定有一个输入层，和一个输出层，中间可以有不同数量的隐藏层。</p>
-<p>##神经网络的工作方式<br>我们用这个数据做为演示：<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2lqih29isj209q087gln.jpg" alt="反异或数据"><br>这个数据其实是表达了以下概念：<br><strong>y＝x1 XNOR x2</strong><br>即NOT(XOR)<br>在看怎么解决反异或之前，我们看看怎么解决AND的问题。</p>
-<p>####AND问题<br>神经网络图看下：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2lqih6troj20d10anwfa.jpg" alt="and网络"><br>事实上这是只有一个神经元的神经网络，它的输入为x1和x2，外加一个偏执单元。<br>x1和x2的输入权重都为+20，偏执单元的权重为-30，激活单元按以下公式计算<br>h(x)=g(20x1+20x2-30)<br>也就是把输入乘上权重，然后作为激活函数的参数，进行计算<br>我们来看看这个神经网络的计算结果<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2lvkgpba8j20cj05c0t3.jpg" alt="and神经网络计算结果"><br>为什么g(-30)≈0呢？<br>我们再看看sigmoid函数：<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2l1nqjw9aj20b40b40tf.jpg" alt="sigmoid函数"><br>事实上在x接近－5的时候，函数值以及非常接近0了，所以当函数值远大于－5的时候函数值一定是非常接近0的。<br>同理我们可以设计一个可以计算OR算法的神经网络：<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2lvqrn9ydj20pg0cq0tu.jpg" alt="OR神经网络"><br>同样一个结构我们修改了偏执单元和输入单元的权重<br>接着我们设计一个NOT神经网络：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2lvugakkqj20mz055q3f.jpg" alt="NOT神经网络"><br>结合以上知识我们可以轻松设计一下三个神经网络：<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2lvymjpkcj20ov05jq3y.jpg" alt="together"><br>如果我们把这三个神经网络结合起来呢？<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2lvymft01j20pb069q4i.jpg" alt="XNOR神经网络"><br>没错，这就是“非异或”神经网络的实现。</p>
-<p>###正向传播<br>正向传播，又叫前向传播，上文演示的计算方式就是正向传播。<br>在我们用公式演算前，先看看怎样用符号表示神经网络：<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2n6h3qp9cj20or05mwf8.jpg" alt="神经网络符号系统"><br>我们用a来表示一个神经元的上标j表达a所在的层，i表示a在某一层中的序号<br>我们用大写的theta来表示权重矩阵，上标j表示从j层到j＋1层所有的权重构成的矩阵</p>
-<p>####正向传播演算<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2n6m2fwynj20l605qq3t.jpg" alt="正向传播"><br>用简单的语言来表达就是：<br><strong>上一层的输入乘上上一层到这一层的权重等于本层的神经元的输入</strong><br>事实上我认为在一个神经网络中最重要的就是调整这些参数，那么有没有办法让参数的调整自动化呢？</p>
-<p>###什么是反向传播<br>反向传播就是有效的自动选择参赛的方式,我们来先来看看在机器学习中，自动参数选择机制是怎样运作的。<br>机器学习的目的是计算一个函数：<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2n3ngpkhij205200s3yb.jpg" alt="模式识别公式"><br>在这个公式中，Zp一个p维的输入模式，W代表系统中可调整的参数集，Yp可以代表Zp的分类标签，也可以代表每个属于某个类别的概率<br>loss函数（现在也叫cost函数）：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2n3vgbkrjj206n00s0sk.jpg" alt="lossFunction"><br>这个函数测量了Dp与Yp之间的误差。<br>我们只需要求min(Ep),也就是最小化误差便能得到最优的W。<br>而求最小化Ep的方法被称作<strong>梯度下降</strong>算法，一张图形容这个算法：<br><img src="http://ww1.sinaimg.cn/mw690/683953bcjw1f2o8pr61hsj20ef075mxy.jpg" alt="梯度下降"><br>图中的像山一样的色彩区域描绘的是某个问题的所有W。<br>为了定位到山的最低点，我们随机从一个地方出发，然后小小朋友一样一步一步走下山，最终我们就会走到最低点（或者会是局部最低点）。<br>对于神经网络这个方法，我们依然使用了Cost函数和梯度下降来求最适合的W（也就是神经网络的权重集），但是为了实现这个计算我们便需要从最后一个神经元一路向前反溯才能实现这个算法，所以这个方法被称作反向传播神经网络，具体的实现如下：</p>
-<p>####神经网络的Cost Function<br><img src="http://ww2.sinaimg.cn/mw690/683953bcjw1f2nsdnejqoj20ms079mxw.jpg" alt="costFunction"><br>非常复杂的一个函数<br>对于这个公式的理解，稍后给出。<br>我们再来看一下前向传播的过程：<br><img src="http://ww3.sinaimg.cn/mw690/683953bcjw1f2nskqyb29j20nf0aujt2.jpg" alt="前向传播例子"><br>在反向传播里面，我们需要找到每个单元的误差，我们定义每个单元的误差为下：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2nsntvc4wj20h10243yi.jpg" alt="误差符号"><br>每个误差的定义如下：<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2o86a1s14j20ct03n0sr.jpg" alt="误差定义"><br>我们计算了最后一层的误差后，再往前反溯推倒其他层的误差<br><img src="http://ww4.sinaimg.cn/mw690/683953bcjw1f2o851mvokj20mv03it9a.jpg" alt="back Propagation"></p>
-<p>##神经网络为什么会有效<br>实际上我们可以把神经网络看作一种filter，它可以把输入的数据过滤，保留输入数据的特性，同时减低输入数据的大小。<br>或者可以理解为，将输入数据的维度降低。</p>
-<p>##卷积神经网络<br>可以将卷积神经网络看作是更小的filter。</p>
-<p>(4.4,未完待续)</p>
-
-      
-    </div>
-    <footer>
-      
-        
-        
-      
-      <div class="clearfix"></div>
-    </footer>
-  </div>
-</article>
-
-
-
-
 
 <nav id="pagination">
   
-    <a href="/page/2/" class="alignleft prev">Vorherige Seite</a>
+    <a href="/page/2/" class="alignleft prev">Anterior</a>
   
   
-    <a href="/page/4/" class="alignright next">Nächste Seite</a>
+    <a href="/page/4/" class="alignright next">Siguiente</a>
   
   <div class="clearfix"></div>
 </nav></div></div>
     <aside id="sidebar" class="alignright">
   <div class="search">
   <form action="//google.com/search" method="get" accept-charset="utf-8">
-    <input type="search" name="q" results="0" placeholder="Suche">
+    <input type="search" name="q" results="0" placeholder="Buscar">
     <input type="hidden" name="q" value="site:yoursite.com">
   </form>
 </div>
@@ -570,7 +567,7 @@
   </div>
   <footer id="footer" class="inner"><div class="alignleft">
   
-  &copy; 2016 Taylor Lee
+  &copy; 2017 Taylor Lee
   
 </div>
 <div class="clearfix"></div></footer>
